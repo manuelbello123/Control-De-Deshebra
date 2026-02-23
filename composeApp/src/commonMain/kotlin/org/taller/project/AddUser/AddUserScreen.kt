@@ -1,11 +1,10 @@
-package org.taller.project.History
+package org.taller.project.AddUser
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,8 +24,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Inbox
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.PersonAdd
+import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,28 +42,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 
 @Composable
-fun HistoryScreen(
-    navController: NavController,
-    viewModel: HistoryViewModel
+fun AddUserScreen(
+    navController: NavHostController,
+    viewModel: AddUserViewModel
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    var showDialog by remember { mutableStateOf(false) }
 
+    // Cargar usuarios al iniciar
     LaunchedEffect(Unit) {
-        viewModel.cargarHistorial()
+        viewModel.cargarUsuarios()
     }
 
+    // Mostrar errores en Snackbar
     LaunchedEffect(state.error) {
         state.error?.let { mensaje ->
             val resultado = snackbarHostState.showSnackbar(
@@ -72,6 +79,18 @@ fun HistoryScreen(
             if (resultado == SnackbarResult.ActionPerformed) {
                 viewModel.retry()
             }
+            viewModel.clearError()
+        }
+    }
+
+    // Mostrar mensajes de éxito
+    LaunchedEffect(state.successMessage) {
+        state.successMessage?.let { mensaje ->
+            snackbarHostState.showSnackbar(
+                message = mensaje,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.clearSuccessMessage()
         }
     }
 
@@ -80,10 +99,34 @@ fun HistoryScreen(
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
                     snackbarData = data,
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                    actionColor = MaterialTheme.colorScheme.error,
+                    containerColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.errorContainer
+                    } else {
+                        Color(0xFF001427)
+                    },
+                    contentColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.onErrorContainer
+                    } else {
+                        Color.White
+                    },
+                    actionColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        Color.White.copy(alpha = 0.8f)
+                    },
                     shape = RoundedCornerShape(12.dp)
+                )
+            }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                containerColor = Color(0xFF001427),
+                contentColor = Color.White
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PersonAdd,
+                    contentDescription = "Agregar usuario"
                 )
             }
         }
@@ -109,20 +152,25 @@ fun HistoryScreen(
             ) {
                 Column {
                     Text(
-                        text = "Producción de la semana actual",
+                        text = "Usuarios",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF001427)
                     )
                     Text(
-                        text = "Gestiona tu historial",
+                        text = "Gestiona accesos al sistema",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color(0xFF001427).copy(alpha = 0.6f)
                     )
                 }
             }
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // ── Contenido ─────────────────────────────────────────────
             Box(modifier = Modifier.fillMaxSize()) {
+
+                // Estado: cargando
                 this@Column.AnimatedVisibility(
                     visible = state.isLoading,
                     enter = fadeIn(),
@@ -137,15 +185,16 @@ fun HistoryScreen(
                             color = Color(0xFF001427)
                         )
                         Text(
-                            text = "Cargando producción...",
+                            text = "Cargando usuarios...",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color(0xFF001427)
                         )
                     }
                 }
 
+                // Estado: sin datos
                 this@Column.AnimatedVisibility(
-                    visible = !state.isLoading && state.data.isEmpty() && state.error == null,
+                    visible = !state.isLoading && state.usuarios.isEmpty(),
                     enter = fadeIn(),
                     exit = fadeOut(),
                     modifier = Modifier.align(Alignment.Center)
@@ -155,92 +204,96 @@ fun HistoryScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.Inbox,
+                            imageVector = Icons.Outlined.PersonOff,
                             contentDescription = null,
                             modifier = Modifier.size(48.dp),
                             tint = Color(0xFF001427).copy(alpha = 0.5f)
                         )
                         Text(
-                            text = "Sin producción esta semana",
+                            text = "No hay usuarios registrados",
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color(0xFF001427)
                         )
                     }
                 }
 
+                // Estado: lista con datos
                 this@Column.AnimatedVisibility(
-                    visible = !state.isLoading && state.data.isNotEmpty(),
+                    visible = !state.isLoading && state.usuarios.isNotEmpty(),
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                        contentPadding = PaddingValues(bottom = 24.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
-                        // Total de registros
                         item {
-                            val totalRegistros = state.data.sumOf { it.productions.size }
                             Text(
-                                text = "$totalRegistros registros en la semana",
+                                text = "${state.usuarios.size} usuarios",
                                 style = MaterialTheme.typography.labelMedium,
-                                color = Color(0xFF001427),
-                                modifier = Modifier.padding(bottom = 16.dp)
+                                color = Color(0xFF001427).copy(alpha = 0.7f)
                             )
                         }
 
-                        // Iterar sobre cada día
-                        state.data.forEach { dayGroup ->
-                            // Header del día
-                            itemsIndexed(
-                                items = dayGroup.productions,
-                                key = { _, item -> item.idProduccion }
-                            ) { index, item ->
+                        itemsIndexed(
+                            items = state.usuarios,
+                            key = { _, usuario -> usuario.idUsuario }
+                        ) { index, usuario ->
 
-                                val offsetX = remember { Animatable(300f) }
-                                val alpha = remember { Animatable(0f) }
+                            val offsetX = remember { Animatable(300f) }
+                            val alpha = remember { Animatable(0f) }
 
-                                LaunchedEffect(Unit) {
-                                    launch {
-                                        offsetX.animateTo(
-                                            targetValue = 0f,
-                                            animationSpec = tween(
-                                                durationMillis = 500,
-                                                delayMillis = index * 80
-                                            )
+                            LaunchedEffect(Unit) {
+                                launch {
+                                    offsetX.animateTo(
+                                        targetValue = 0f,
+                                        animationSpec = tween(
+                                            durationMillis = 500,
+                                            delayMillis = index * 80
                                         )
-                                    }
-                                    launch {
-                                        alpha.animateTo(
-                                            targetValue = 1f,
-                                            animationSpec = tween(
-                                                durationMillis = 400,
-                                                delayMillis = index * 80
-                                            )
-                                        )
-                                    }
+                                    )
                                 }
-
-                                Column(
-                                    modifier = Modifier
-                                        .offset(x = offsetX.value.dp)
-                                        .graphicsLayer { this.alpha = alpha.value }
-                                ) {
-                                    HistoryCard(item = item)
-                                    Spacer(modifier = Modifier.height(12.dp))
+                                launch {
+                                    alpha.animateTo(
+                                        targetValue = 1f,
+                                        animationSpec = tween(
+                                            durationMillis = 400,
+                                            delayMillis = index * 80
+                                        )
+                                    )
                                 }
                             }
 
-                            // Espaciado entre días
-                            item(key = "spacer_${dayGroup.fecha}") {
-                                Spacer(modifier = Modifier.height(8.dp))
+                            Column(
+                                modifier = Modifier
+                                    .offset(x = offsetX.value.dp)
+                                    .graphicsLayer { this.alpha = alpha.value }
+                            ) {
+                                UserCard(
+                                    usuario = usuario,
+                                    onToggleActivo = { viewModel.toggleActivo(usuario) },
+                                    onDelete = { viewModel.eliminarUsuario(usuario.idUsuario) }
+                                )
+
+                                Spacer(modifier = Modifier.height(12.dp))
                             }
                         }
-
-                        item { Spacer(Modifier.height(40.dp)) }
                     }
                 }
             }
+        }
+
+        // ── Dialog para crear usuario ─────────────────────────────────
+        if (showDialog) {
+            AddUserDialog(
+                isCreating = state.isCreating,
+                onDismiss = { showDialog = false },
+                onConfirm = { username, password, rol ->
+                    viewModel.crearUsuario(username, password, rol)
+                    showDialog = false
+                }
+            )
         }
     }
 }

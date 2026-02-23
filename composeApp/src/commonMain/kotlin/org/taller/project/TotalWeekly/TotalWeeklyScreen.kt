@@ -31,7 +31,7 @@ fun TotalWeeklyScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ){
             item {
-                Text("TotalWeekly Screen")
+                Text("Total Weekly Screen")
             }
         }
     }

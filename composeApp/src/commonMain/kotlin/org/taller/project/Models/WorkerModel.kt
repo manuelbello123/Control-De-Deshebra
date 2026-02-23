@@ -10,3 +10,14 @@ data class TrabajadorDto(
     @SerialName("usuario")         val usuario: String,
     @SerialName("activo")          val activo: Boolean
 )
+@Serializable
+data class CreateWorkerRequest(
+    val nombre: String,
+    val usuario: String
+)
+@Serializable
+data class UpdateTrabajadorRequest(
+    val nombre: String,
+    val usuario: String,
+    val activo: Boolean
+)

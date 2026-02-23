@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.filled.WifiPassword
 import androidx.compose.material.icons.outlined.Password
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -51,9 +53,10 @@ import org.taller.project.Navigation.Routes
 
 @Composable
 fun LoginScreen(
-    navController: NavController, // se queda por consistencia, no se usa aquí
+    navController: NavController,
     viewModel: AuthViewModel
 ) {
+
     val state by viewModel.state.collectAsState()
 
     var username by remember { mutableStateOf("") }
@@ -62,9 +65,6 @@ fun LoginScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-
-
-    // ✅ Mostrar Snackbar cuando hay error
     LaunchedEffect(state.error) {
         state.error?.let { message ->
             snackbarHostState.showSnackbar(message)
@@ -73,11 +73,11 @@ fun LoginScreen(
     }
 
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
+
         LoginHeader()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,120 +85,27 @@ fun LoginScreen(
                 .statusBarsPadding()
                 .background(Color.White)
         ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp)
+                    .imePadding(),
+                contentAlignment = Alignment.Center
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
 
-                    Text(
-                        text = "Bienvenido",
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = Color(0xFF001427)
-
-                    )
-
-                    Text(
-                        text = "Inicia sesión para continuar",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF001427)
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    OutlinedTextField(
-                        value = username,
-                        onValueChange = { username = it },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF001427),
-                            unfocusedBorderColor = Color(0xFF001427),
-                            cursorColor = Color(0xFF001427),
-                            focusedLabelColor = Color(0xFF001427),
-                            unfocusedLabelColor = Color(0xFF001427),
-                            focusedTextColor = Color(0xFF001427),
-                            unfocusedTextColor = Color(0xFF001427)
-                        ),
-                        label = { Text("Usuario") },
-                        singleLine = true,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = null,
-                                tint = Color(0xFF001427)
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = !state.isLoading
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF001427),
-                            unfocusedBorderColor = Color(0xFF001427),
-                            cursorColor = Color(0xFF001427),
-                            focusedLabelColor = Color(0xFF001427),
-                            unfocusedLabelColor = Color(0xFF001427),
-                            focusedTextColor = Color(0xFF001427),
-                            unfocusedTextColor = Color(0xFF001427)
-                        ),
-                        label = { Text("Contraseña") },
-                        singleLine = true,
-                        visualTransformation = PasswordVisualTransformation(),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Password,
-                                contentDescription = null,
-                                tint = Color(0xFF001427)
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = !state.isLoading
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Button(
-                        onClick = {
-                            keyboardController?.hide()
-                            viewModel.login(username, password)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
-                        enabled = !state.isLoading,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF001427),
-                            contentColor = Color.White
-                        )
-                    ) {
-                        if (state.isLoading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                strokeWidth = 2.dp,
-                                color = Color(0xFF001427)
-
-                            )
-                        } else {
-                            Text("Iniciar sesión")
-                        }
+                LoginCard(
+                    username = username,
+                    password = password,
+                    onUsernameChange = { username = it },
+                    onPasswordChange = { password = it },
+                    isLoading = state.isLoading,
+                    onLoginClick = {
+                        keyboardController?.hide()
+                        viewModel.login(username, password)
                     }
-                }
+                )
             }
         }
-    }
     }
 }
