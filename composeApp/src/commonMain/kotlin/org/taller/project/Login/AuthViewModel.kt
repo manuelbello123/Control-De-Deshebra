@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.taller.project.Models.AuthState
 
 class AuthViewModel(
     private val authRepository: AuthRepository,
@@ -44,8 +43,10 @@ class AuthViewModel(
         sessionManager.endSession()
         _state.value = AuthState()
     }
-
     fun clearError() {
         _state.value = _state.value.copy(error = null)
+    }
+    fun clearSuccessMessage() {
+        _state.value = _state.value.copy(successMessage = null)
     }
 }

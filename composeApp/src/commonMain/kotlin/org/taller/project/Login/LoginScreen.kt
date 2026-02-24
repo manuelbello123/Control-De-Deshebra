@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
@@ -31,6 +32,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -45,11 +48,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.taller.project.Components.LoginHeader
-import org.taller.project.Navigation.Routes
+import org.taller.project.Components.TopHader
 
 @Composable
 fun LoginScreen(
@@ -66,18 +67,50 @@ fun LoginScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.error) {
-        state.error?.let { message ->
-            snackbarHostState.showSnackbar(message)
+        state.error?.let { mensaje ->
+            snackbarHostState.showSnackbar(
+                message = mensaje,
+                duration = SnackbarDuration.Short
+            )
             viewModel.clearError()
         }
     }
-
+    // Mostrar mensajes de éxito
+    LaunchedEffect(state.successMessage) {
+        state.successMessage?.let { mensaje ->
+            snackbarHostState.showSnackbar(
+                message = mensaje,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.clearSuccessMessage()
+        }
+    }
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.errorContainer
+                    } else {
+                        Color(0xFF001427)
+                    },
+                    contentColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.onErrorContainer
+                    } else {
+                        Color.White
+                    },
+                    actionColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        Color.White.copy(alpha = 0.8f)
+                    },
+                    shape = RoundedCornerShape(12.dp)
+                )
+            }
+        }
     ) { paddingValues ->
-
-        LoginHeader()
-
+        TopHader()
         Column(
             modifier = Modifier
                 .fillMaxSize()

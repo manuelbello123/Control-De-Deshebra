@@ -72,6 +72,17 @@ fun HistoryScreen(
             if (resultado == SnackbarResult.ActionPerformed) {
                 viewModel.retry()
             }
+            viewModel.clearError()
+        }
+    }
+    // Mostrar mensajes de éxito
+    LaunchedEffect(state.successMessage) {
+        state.successMessage?.let { mensaje ->
+            snackbarHostState.showSnackbar(
+                message = mensaje,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.clearSuccessMessage()
         }
     }
 
@@ -80,9 +91,21 @@ fun HistoryScreen(
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
                     snackbarData = data,
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                    actionColor = MaterialTheme.colorScheme.error,
+                    containerColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.errorContainer
+                    } else {
+                        Color(0xFF001427)
+                    },
+                    contentColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.onErrorContainer
+                    } else {
+                        Color.White
+                    },
+                    actionColor = if (state.error != null) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        Color.White.copy(alpha = 0.8f)
+                    },
                     shape = RoundedCornerShape(12.dp)
                 )
             }
@@ -121,6 +144,7 @@ fun HistoryScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
                 this@Column.AnimatedVisibility(
@@ -144,8 +168,9 @@ fun HistoryScreen(
                     }
                 }
 
+                // Estado: sin datos
                 this@Column.AnimatedVisibility(
-                    visible = !state.isLoading && state.data.isEmpty() && state.error == null,
+                    visible = !state.isLoading && state.historial.isEmpty() && state.error == null,
                     enter = fadeIn(),
                     exit = fadeOut(),
                     modifier = Modifier.align(Alignment.Center)
@@ -161,7 +186,7 @@ fun HistoryScreen(
                             tint = Color(0xFF001427).copy(alpha = 0.5f)
                         )
                         Text(
-                            text = "Sin producción esta semana",
+                            text = "No hay producción esta semana",
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color(0xFF001427)
                         )
@@ -169,18 +194,18 @@ fun HistoryScreen(
                 }
 
                 this@Column.AnimatedVisibility(
-                    visible = !state.isLoading && state.data.isNotEmpty(),
+                    visible = !state.isLoading && state.historial.isNotEmpty(),
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                        contentPadding = PaddingValues(bottom = 24.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
                         // Total de registros
                         item {
-                            val totalRegistros = state.data.sumOf { it.productions.size }
+                            val totalRegistros = state.historial.sumOf { it.productions.size }
                             Text(
                                 text = "$totalRegistros registros en la semana",
                                 style = MaterialTheme.typography.labelMedium,
@@ -190,8 +215,14 @@ fun HistoryScreen(
                         }
 
                         // Iterar sobre cada día
-                        state.data.forEach { dayGroup ->
-                            // Header del día
+                        state.historial.forEach { dayGroup ->
+                            item(key = "header_${dayGroup.fecha}") {
+                                DayHeader(
+                                    dayName = dayGroup.dayName,
+                                    count = dayGroup.productions.size
+                                )
+                            }
+                            // 🔹 Cards con animación cascada
                             itemsIndexed(
                                 items = dayGroup.productions,
                                 key = { _, item -> item.idProduccion }
@@ -230,14 +261,7 @@ fun HistoryScreen(
                                     Spacer(modifier = Modifier.height(12.dp))
                                 }
                             }
-
-                            // Espaciado entre días
-                            item(key = "spacer_${dayGroup.fecha}") {
-                                Spacer(modifier = Modifier.height(8.dp))
-                            }
                         }
-
-                        item { Spacer(Modifier.height(40.dp)) }
                     }
                 }
             }

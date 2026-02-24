@@ -6,6 +6,7 @@ import io.ktor.client.plugins.ResponseException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
 import org.taller.project.Login.InMemorySessionManager
@@ -14,10 +15,7 @@ import org.taller.project.Network.NetworkUtils
 
 
 class HistoryViewModel(
-    private val sessionManager: InMemorySessionManager,
-    private val repository: HistoryRepository = HistoryRepository(
-        client = NetworkUtils.buildHttpClient(sessionManager)
-    )
+    private val repository: HistoryRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HistoryState())
@@ -29,49 +27,49 @@ class HistoryViewModel(
 
     fun cargarHistorial() {
         viewModelScope.launch {
-            _state.value = HistoryState(isLoading = true)
 
-            try {
-                val historial = repository.getHistorialSemanaActual()
+            _state.value = _state.value.copy(
+                isLoading = true,
+                error = null
+            )
 
-                // Agrupar por fecha y convertir a ProductionByDay
-                val agrupado = historial
-                    .groupBy { it.fecha }  // agrupa por "2026-01-29"
-                    .map { (fecha, producciones) ->
-                        ProductionByDay(
-                            dayName = fecha.toDayName(),
-                            fecha = fecha,
-                            productions = producciones
-                        )
-                    }
-                    //.sortedByDescending { it.fecha }  // ⬅️ Más reciente primero
+            when (val result = repository.getHistorialSemanaActual()) {
 
-                _state.value = HistoryState(
-                    isLoading = false,
-                    data = agrupado
-                )
+                is HistoryResult.Success -> {
 
-            } catch (e: ResponseException) {
-                val codigo = e.response.status.value
-                _state.value = HistoryState(
-                    isLoading = false,
-                    error = "Error del servidor ($codigo): ${e.message}"
-                )
+                    val agrupado = result.historial
+                        .groupBy { it.fecha }
+                        .map { (fecha, producciones) ->
+                            ProductionByDay(
+                                dayName = fecha.toDayName(),
+                                fecha = fecha,
+                                productions = producciones
+                            )
+                        }
 
-            } catch (e: IOException) {
-                _state.value = HistoryState(
-                    isLoading = false,
-                    error = "Sin conexión a internet. Verifica tu red."
-                )
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        historial = agrupado,
+                        error = null
+                    )
+                }
 
-            } catch (e: Exception) {
-                _state.value = HistoryState(
-                    isLoading = false,
-                    error = "Error inesperado: ${e.message}"
-                )
+                is HistoryResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        error = result.message
+                    )
+                }
             }
         }
     }
+    // ── Limpiar mensajes ───────────────────────────────────────────────
+    fun clearError() {
+        _state.value = _state.value.copy(error = null)
+    }
 
+    fun clearSuccessMessage() {
+        _state.value = _state.value.copy(successMessage = null)
+    }
     fun retry() = cargarHistorial()
 }

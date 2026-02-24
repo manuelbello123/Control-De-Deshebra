@@ -25,7 +25,9 @@ import org.taller.project.Login.AuthViewModel
 import org.taller.project.Login.InMemorySessionManager
 import org.taller.project.Login.LoginScreen
 import org.taller.project.Network.NetworkUtils
+import org.taller.project.TotalWeekly.TotalWeeklyRepository
 import org.taller.project.TotalWeekly.TotalWeeklyScreen
+import org.taller.project.TotalWeekly.TotalWeeklyViewModel
 
 
 @Composable
@@ -49,7 +51,6 @@ fun AppNavGraph(navController: NavHostController) {
 
     val historyViewModel = remember {
         HistoryViewModel(
-            sessionManager = sessionManager,
             repository = HistoryRepository(
                 client = NetworkUtils.buildHttpClient(sessionManager)
             )
@@ -66,6 +67,13 @@ fun AppNavGraph(navController: NavHostController) {
     val addUserViewModel = remember {
         AddUserViewModel(
             repository = AddUserRepository(
+                client = NetworkUtils.buildHttpClient(sessionManager)
+            )
+        )
+    }
+    val totalWeeklyViewModel = remember {
+        TotalWeeklyViewModel(
+            repository = TotalWeeklyRepository(
                 client = NetworkUtils.buildHttpClient(sessionManager)
             )
         )
@@ -110,7 +118,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(Routes.TOTAL_WEEKLY) {
-            TotalWeeklyScreen(navController)
+            TotalWeeklyScreen(navController, totalWeeklyViewModel)
         }
     }
 }

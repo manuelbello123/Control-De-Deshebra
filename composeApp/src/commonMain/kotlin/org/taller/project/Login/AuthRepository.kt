@@ -57,16 +57,16 @@ class AuthRepository : AuthRepo {
             AuthResult.Success(user)
 
         } catch (e: ClientRequestException) {
-            AuthResult.Error("Usuario o contraseña incorrectos")
+            AuthResult.Error("Usuario o contraseña incorrectos: ${e.response.status.description} ")
 
         } catch (e: ServerResponseException) {
-            AuthResult.Error("Error del servidor")
+            AuthResult.Error("Error del servidor. Intenta más tarde.")
 
         } catch (e: SerializationException) {
             AuthResult.Error("Respuesta inválida del servidor")
 
         } catch (e: IOException) {
-            AuthResult.Error("Error de conexión")
+            AuthResult.Error("Sin conexión a internet. Verifica tu red.")
 
         } catch (e: Exception) {
             AuthResult.Error("Error inesperado: ${e.message}")

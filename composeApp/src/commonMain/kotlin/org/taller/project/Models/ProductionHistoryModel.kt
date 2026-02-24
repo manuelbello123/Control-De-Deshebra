@@ -15,7 +15,7 @@ data class ProductionHistory(
     val semanaIso: Int
 )
 data class ProductionByDay(
-    val dayName: String,       // "Martes"
-    val fecha: String,         // "2026-01-29" (usamos esta para ordenar)
+    val dayName: String,
+    val fecha: String,
     val productions: List<ProductionHistory>
 )

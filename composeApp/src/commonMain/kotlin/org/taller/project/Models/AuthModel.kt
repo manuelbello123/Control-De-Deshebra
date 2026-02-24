@@ -23,20 +23,7 @@ data class AuthUser(
     val token: String
 )
 
-@Serializable
-data class AuthState(
-    val isLoading: Boolean = false,
-    val user: AuthUser? = null,
-    val error: String? = null
-)
 
-@Serializable
-data class SessionState(
-    val user: AuthUser? = null
-) {
-    val isLoggedIn: Boolean
-        get() = user != null
-}
 
 @Serializable
 data class Users(

@@ -4,7 +4,6 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import org.taller.project.Models.ProductionHistory
 
-// Convierte "2026-01-29" a "Jueves"
 fun String.toDayName(): String {
     return try {
         val date = LocalDate.parse(this)  // formato ISO: yyyy-MM-dd
