@@ -18,6 +18,7 @@ import org.taller.project.AddWorker.AddWorkerViewModel
 import org.taller.project.History.HistoryRepository
 import org.taller.project.History.HistoryScreen
 import org.taller.project.History.HistoryViewModel
+import org.taller.project.HomeWorker.HomeWorkerRepository
 import org.taller.project.HomeWorker.HomeWorkerScreen
 import org.taller.project.HomeWorker.HomeWorkerViewModel
 import org.taller.project.Login.AuthRepository
@@ -25,6 +26,7 @@ import org.taller.project.Login.AuthViewModel
 import org.taller.project.Login.InMemorySessionManager
 import org.taller.project.Login.LoginScreen
 import org.taller.project.Network.NetworkUtils
+import org.taller.project.ProductionWorker.ProductionWorkerScreen
 import org.taller.project.TotalWeekly.TotalWeeklyRepository
 import org.taller.project.TotalWeekly.TotalWeeklyScreen
 import org.taller.project.TotalWeekly.TotalWeeklyViewModel
@@ -46,7 +48,11 @@ fun AppNavGraph(navController: NavHostController) {
     }
 
     val homeWorkerViewModel = remember {
-        HomeWorkerViewModel(sessionManager)
+        HomeWorkerViewModel(
+            repository = HomeWorkerRepository(
+                client = NetworkUtils.buildHttpClient(sessionManager)
+            )
+        )
     }
 
     val historyViewModel = remember {
@@ -120,5 +126,8 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Routes.TOTAL_WEEKLY) {
             TotalWeeklyScreen(navController, totalWeeklyViewModel)
         }
+        // Ruta con parámetro para PRODUCTION_WORKER
+
+
     }
 }

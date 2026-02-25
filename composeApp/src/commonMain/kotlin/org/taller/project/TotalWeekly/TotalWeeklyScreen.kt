@@ -186,6 +186,7 @@ fun TotalWeeklyScreen(
                         )
                     }
                 }
+                // ── Estado: Con datos ─────────────────────────────────
                 this@Column.AnimatedVisibility(
                     visible = !state.isLoading && state.totales.isNotEmpty(),
                     enter = fadeIn(),
