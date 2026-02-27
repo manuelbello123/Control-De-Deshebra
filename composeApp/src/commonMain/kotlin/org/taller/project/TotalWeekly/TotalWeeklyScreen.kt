@@ -114,30 +114,7 @@ fun TotalWeeklyScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // ── Encabezado ────────────────────────────────────────────
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column {
-                    Text(
-                        text = "Totales Semanales",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF001427)
-                    )
-                    Text(
-                        text = "Resumen de producción y pagos",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF001427).copy(alpha = 0.6f)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
                 // ── Estado: Cargando ──────────────────────────────────

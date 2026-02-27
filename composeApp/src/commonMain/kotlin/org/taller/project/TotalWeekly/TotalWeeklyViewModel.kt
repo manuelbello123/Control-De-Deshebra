@@ -14,9 +14,9 @@ class TotalWeeklyViewModel(
     private val _state = MutableStateFlow(TotalWeeklyState())
     val state: StateFlow<TotalWeeklyState> = _state.asStateFlow()
 
-    init {
+    /*nit {
         cargarTotales()
-    }
+    }*/
 
     // ── Obtener totales semanales ──────────────────────────────────────
     fun cargarTotales() {

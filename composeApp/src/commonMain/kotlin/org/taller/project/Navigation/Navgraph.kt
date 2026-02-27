@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import org.taller.project.AddGarment.AddGarmentScreen
 import org.taller.project.AddUser.AddUserRepository
 import org.taller.project.AddUser.AddUserScreen
@@ -25,8 +26,11 @@ import org.taller.project.Login.AuthRepository
 import org.taller.project.Login.AuthViewModel
 import org.taller.project.Login.InMemorySessionManager
 import org.taller.project.Login.LoginScreen
+import org.taller.project.Models.ProduccionTrabajadorDetalle
 import org.taller.project.Network.NetworkUtils
+import org.taller.project.ProductionWorker.ProductionWorkerRepository
 import org.taller.project.ProductionWorker.ProductionWorkerScreen
+import org.taller.project.ProductionWorker.ProductionWorkerViewModel
 import org.taller.project.TotalWeekly.TotalWeeklyRepository
 import org.taller.project.TotalWeekly.TotalWeeklyScreen
 import org.taller.project.TotalWeekly.TotalWeeklyViewModel
@@ -50,6 +54,13 @@ fun AppNavGraph(navController: NavHostController) {
     val homeWorkerViewModel = remember {
         HomeWorkerViewModel(
             repository = HomeWorkerRepository(
+                client = NetworkUtils.buildHttpClient(sessionManager)
+            )
+        )
+    }
+    val productionWorkerViewModel = remember {
+        ProductionWorkerViewModel(
+            repository = ProductionWorkerRepository(
                 client = NetworkUtils.buildHttpClient(sessionManager)
             )
         )
@@ -126,8 +137,18 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Routes.TOTAL_WEEKLY) {
             TotalWeeklyScreen(navController, totalWeeklyViewModel)
         }
-        // Ruta con parámetro para PRODUCTION_WORKER
 
+        composable<ProduccionTrabajadorDetalle> { backStackEntry ->
+            val args = backStackEntry.toRoute<ProduccionTrabajadorDetalle>()
+
+            ProductionWorkerScreen(
+                navController = navController,
+                viewModel = productionWorkerViewModel,
+                idTrabajador = args.id,
+                nombre = args.nombre
+
+            )
+        }
 
     }
 }

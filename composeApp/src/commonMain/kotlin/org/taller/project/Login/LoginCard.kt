@@ -98,7 +98,7 @@ fun LoginCard(
                 )
 
                 Text(
-                    text = "Inicia sesión para continuar",
+                    text = "Autenticación requerida",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF001427).copy(alpha = 0.7f)
                 )
@@ -177,7 +177,7 @@ fun LoginCard(
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
                             strokeWidth = 2.dp,
-                            color = Color.White
+                            color = Color(0xFF001427)
                         )
                     } else {
                         Text("Iniciar sesión")

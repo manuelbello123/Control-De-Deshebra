@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,7 @@ import org.taller.project.Models.TrabajadorConProduccion
 import org.taller.project.TotalWeekly.formatMoney
 
 @Composable
-fun WorkerProductionCard(
+fun HomeWorkerCard(
     trabajador: TrabajadorConProduccion,
     onClick: () -> Unit
 ) {
@@ -85,25 +86,29 @@ fun WorkerProductionCard(
             }
 
             // ── Métricas: Piezas y Sueldo ─────────────────────────────
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Total piezas
-                ProductionDailyMetric(
-                    icon = Icons.Outlined.Checkroom,
-                    value = "${trabajador.totalPrendas}",
-                    label = "pzs"
-                )
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ){
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    // Total piezas
+                    ProductionDailyMetric(
+                        icon = Icons.Outlined.Checkroom,
+                        value = "${trabajador.totalPrendas} pzs",
+                        label = ""
+                    )
 
-                // Sueldo diario
-                ProductionDailyMetric(
-                    icon = Icons.Outlined.Payments,
-                    value = formatMoney(trabajador.sueldoDiario),
-                    label = "",
-                    highlighted = trabajador.sueldoDiario > 0
-                )
-
+                    // Sueldo diario
+                    ProductionDailyMetric(
+                        icon = Icons.Outlined.Payments,
+                        value = formatMoney(trabajador.sueldoDiario),
+                        label = "",
+                        highlighted = trabajador.sueldoDiario > 0
+                    )
+                }
                 // Ícono de flecha
                 Icon(
                     imageVector = Icons.Outlined.ChevronRight,
@@ -112,6 +117,7 @@ fun WorkerProductionCard(
                     modifier = Modifier.size(20.dp)
                 )
             }
+
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.taller.project.AddUser
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,7 +57,7 @@ fun AddUserDialog(
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var selectedRol by remember { mutableStateOf("CAPTURISTA") }
+    var selectedRol by remember { mutableStateOf("") }  // ⬅️ Vacío por defecto
     var expanded by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -183,7 +184,8 @@ fun AddUserDialog(
 
                     ExposedDropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.background(Color.White)
                     ) {
                         DropdownMenuItem(
                             text = { Text("ADMIN") },
@@ -239,7 +241,10 @@ fun AddUserDialog(
                             containerColor = Color(0xFF001427),
                             contentColor = Color.White
                         ),
-                        enabled = !isCreating && username.isNotBlank() && password.isNotBlank()
+                        enabled = !isCreating &&
+                                username.isNotBlank() &&
+                                password.isNotBlank() &&
+                                selectedRol.isNotBlank()  // ⬅️ Validar que rol esté seleccionado
                     ) {
                         if (isCreating) {
                             CircularProgressIndicator(

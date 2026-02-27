@@ -21,9 +21,9 @@ class HistoryViewModel(
     private val _state = MutableStateFlow(HistoryState())
     val state: StateFlow<HistoryState> = _state.asStateFlow()
 
-    init {
+    /*init {
         cargarHistorial()
-    }
+    }*/
 
     fun cargarHistorial() {
         viewModelScope.launch {

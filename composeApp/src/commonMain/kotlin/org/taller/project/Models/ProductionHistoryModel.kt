@@ -18,4 +18,5 @@ data class ProductionByDay(
     val dayName: String,
     val fecha: String,
     val productions: List<ProductionHistory>
+
 )

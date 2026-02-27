@@ -13,20 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.RemoveRedEye
-import androidx.compose.material.icons.filled.WifiPassword
-import androidx.compose.material.icons.outlined.Password
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.rounded.Password
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -50,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.taller.project.Components.TopHader
 
 @Composable
 fun LoginScreen(
@@ -110,7 +95,6 @@ fun LoginScreen(
             }
         }
     ) { paddingValues ->
-        TopHader()
         Column(
             modifier = Modifier
                 .fillMaxSize()

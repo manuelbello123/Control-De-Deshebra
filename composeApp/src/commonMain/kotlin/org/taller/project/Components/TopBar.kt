@@ -9,16 +9,11 @@ import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String) {
+fun TopBar(content: @Composable () -> Unit) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color(0xFF001427)
         ),
-        title = {
-            Text(
-                text = title,
-                color = Color.White
-            )
-        }
+        title = { content() }
     )
 }

@@ -61,6 +61,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import org.taller.project.Models.ProduccionTrabajadorDetalle
+import org.taller.project.Models.TrabajadorConProduccion
+import org.taller.project.Models.TrabajadorDto
 import org.taller.project.Navigation.Routes
 
 @Composable
@@ -127,28 +131,7 @@ fun HomeWorkerScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            // ── Encabezado ────────────────────────────────────────────
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column {
-                    Text(
-                        text = "Produccion del día",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF001427)
-                    )
-                    Text(
-                        text = "Toca un trabajador para ver detalles",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF001427).copy(alpha = 0.6f)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
                 // ── Estado: Cargando ──────────────────────────────────
@@ -251,9 +234,16 @@ fun HomeWorkerScreen(
                                         .offset(x = offsetX.value.dp)
                                         .graphicsLayer { this.alpha = alpha.value }
                                 ) {
-                                    WorkerProductionCard(
+                                    HomeWorkerCard(
                                         trabajador = trabajador,
-                                        onClick = {}
+                                        onClick = {
+                                            navController.navigate(
+                                                ProduccionTrabajadorDetalle(
+                                                    trabajador.idTrabajador,
+                                                    trabajador.nombre
+                                                )
+                                            )
+                                        }
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
                                 }
@@ -265,7 +255,7 @@ fun HomeWorkerScreen(
                     Column(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(bottom = 84.dp),
+                            .padding(bottom = 100.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         horizontalAlignment = Alignment.End
                     ) {
@@ -277,7 +267,7 @@ fun HomeWorkerScreen(
                             ) {
 
                                 SmallActionButton(
-                                    text = "Trabajador",
+                                    text = "Trabajadores",
                                     icon = Icons.Outlined.Person,
                                     primaryColor = Color(0xFF001427)
                                 ) {
@@ -286,7 +276,7 @@ fun HomeWorkerScreen(
                                 }
 
                                 SmallActionButton(
-                                    text = "Usuario",
+                                    text = "Usuarios",
                                     icon = Icons.Outlined.Badge,
                                     primaryColor = Color(0xFF001427)
                                 ) {
@@ -295,7 +285,7 @@ fun HomeWorkerScreen(
                                 }
 
                                 SmallActionButton(
-                                    text = "Prenda",
+                                    text = "Prendas",
                                     icon = Icons.Outlined.Checkroom,
                                     primaryColor = Color(0xFF001427)
                                 ) {

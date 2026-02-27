@@ -27,7 +27,7 @@ class HistoryRepository(private val client: HttpClient) {
     private fun semanaIsoActual(): Int {
         val hoy = Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val diaSemana = hoy.dayOfWeek.isoDayNumber   // 1=Lun … 7=Dom
+        val diaSemana = hoy.dayOfWeek.isoDayNumber
         val semanaNum = (hoy.dayOfYear - diaSemana + 10) / 7
         val semana = when {
             semanaNum < 1  -> 52

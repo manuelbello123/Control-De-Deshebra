@@ -1,5 +1,7 @@
 package org.taller.project.Navigation
 
+import org.taller.project.Models.HeaderData
+
 object Routes {
     const val LOGIN = "login"
     const val HOME_WORKER = "home_worker"
@@ -10,14 +12,46 @@ object Routes {
     const val HISTORY = "history"
     const val TOTAL_WEEKLY = "total_weekly"
 
-    val titles = mapOf(
-        LOGIN to "Login",
-        HOME_WORKER to "Trabajadores",
-        ADD_WORKER to "Agregar Trabajador",
-        ADD_USER to "Agregar Usuario",
-        ADD_GARMENT to "Agregar Prenda",
-        PRODUCTION_WORKER to "Producción Trabajador",
-        HISTORY to "Historial",
-        TOTAL_WEEKLY to "Total Semanal"
+    val headers = mapOf(
+
+        LOGIN to HeaderData(
+            title = "CONFEXA",
+            subtitle = "Sistema avanzado de manufactura textil"
+        ),
+
+        HOME_WORKER to HeaderData(
+            title = "Producción del día",
+            subtitle = "Toca un trabajador para ver detalles"
+        ),
+
+        HISTORY to HeaderData(
+            title = "Producción de la semana actual",
+            subtitle = "Consulta registros anteriores"
+        ),
+
+        TOTAL_WEEKLY to HeaderData(
+            title = "Total semanal",
+            subtitle = "Resumen de producción y pagos"
+        ),
+
+        ADD_WORKER to HeaderData(
+            title = "Trabajadores",
+            subtitle = "Gestiona tu equipo"
+        ),
+
+        ADD_USER to HeaderData(
+            title = "Usuarios",
+            subtitle = "Gestiona accesos al sistema"
+        ),
+
+        ADD_GARMENT to HeaderData(
+            title = "Prendas",
+            subtitle = "Gestiona tus prendas"
+        ),
+        PRODUCTION_WORKER to HeaderData(
+            title = "Produccion",
+            subtitle = "Asigna produccion"
+        )
     )
 }
+
