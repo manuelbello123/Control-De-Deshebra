@@ -35,7 +35,10 @@ import org.taller.project.Models.SueldoSemanalDto
 import org.taller.project.TotalWeekly.formatMoney
 
 @Composable
-fun WeeklySummaryCard(sueldo: SueldoSemanalDto) {
+fun WeeklySummaryCard(
+    sueldo: SueldoSemanalDto?,  // Nullable
+    isLoading: Boolean = false
+) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -71,11 +74,16 @@ fun WeeklySummaryCard(sueldo: SueldoSemanalDto) {
                                 color = Color.White
                             )
                         }
+                        val totalPrendas = if (isLoading) 0 else (sueldo?.totalPrendas ?: 0)
                         Text(
-                            text = "${sueldo.totalPrendas}",
+                            text = "$totalPrendas",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = if (totalPrendas > 0 && !isLoading) {
+                                Color.White
+                            } else {
+                                Color.White.copy(alpha = 0.5f)
+                            }
                         )
                     }
 
@@ -98,11 +106,16 @@ fun WeeklySummaryCard(sueldo: SueldoSemanalDto) {
                                 color = Color.White
                             )
                         }
+                        val sueldoSemanal = if (isLoading) 0.0 else (sueldo?.sueldoSemanal ?: 0.0)
                         Text(
-                            text = formatMoney(sueldo.sueldoSemanal),
+                            text = formatMoney(sueldoSemanal),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = if (sueldoSemanal > 0 && !isLoading) {
+                                Color.White
+                            } else {
+                                Color.White.copy(alpha = 0.5f)
+                            }
                         )
                     }
                 }

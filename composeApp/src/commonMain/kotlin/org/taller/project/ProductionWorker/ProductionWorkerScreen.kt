@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Inbox
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -111,6 +112,35 @@ fun ProductionWorkerScreen(
     }
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color(0xFF001427)
+                ),
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column {
+                            Text(
+                                text = nombre,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            Text(
+                                text = "Producción de la semana",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.White.copy(alpha = 0.7f)
+                            )
+
+                        }
+                    }
+
+                },
+                )
+        },
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
@@ -151,12 +181,12 @@ fun ProductionWorkerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .statusBarsPadding()
+                //.statusBarsPadding()
                 .background(Color.White)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            //Spacer(modifier = Modifier.height(24.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
 
@@ -229,10 +259,10 @@ fun ProductionWorkerScreen(
 
                         // ── Card de resumen semanal ───────────────────────────
                         item {
-                            val semanaActual = state.sueldosSemanales.firstOrNull()
-                            if (semanaActual != null) {
-                                WeeklySummaryCard(sueldo = semanaActual)
-                            }
+                            WeeklySummaryCard(
+                                sueldo = state.sueldosSemanales.firstOrNull(),
+                                isLoading = state.isLoading
+                            )
                         }
 
                         item {

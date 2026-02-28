@@ -101,6 +101,7 @@ class ProductionWorkerViewModel(
                     )
                     // Recargar la producción semanal para ver el nuevo registro
                     cargarProduccionSemanaActual(idTrabajador)
+                    cargarSueldosSemanales(idTrabajador)
                 }
 
                 is CreateProduccionResult.Error -> {
@@ -136,6 +137,7 @@ class ProductionWorkerViewModel(
                     )
                     // Recargar producción
                     cargarProduccionSemanaActual(idTrabajador)
+                    cargarSueldosSemanales(idTrabajador)
                 }
 
                 is UpdateProduccionResult.Error -> {
@@ -166,6 +168,7 @@ class ProductionWorkerViewModel(
                     )
                     // Recargar producción
                     cargarProduccionSemanaActual(idTrabajador)
+                    cargarSueldosSemanales(idTrabajador)
                 }
 
                 is DeleteProduccionResult.Error -> {

@@ -41,6 +41,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.taller.project.Models.PrendaDto
 import org.taller.project.Models.ProduccionExpandida
@@ -272,7 +274,7 @@ fun ProductionCard(
             },
             onDismiss = {
                 showDeleteDialog = false
-                kotlinx.coroutines.MainScope().launch {
+                MainScope().launch {
                     dismissState.reset()
                 }
             }
@@ -287,11 +289,11 @@ fun ProductionCard(
             isUpdating = false, // Puedes conectar esto al state si quieres
             onDismiss = {
                 showEditDialog = false
-                kotlinx.coroutines.MainScope().launch {
+                MainScope().launch {
                     dismissState.reset()
                 }
             },
-            onConfirm = { idPrenda, cantidad ->
+            onConfirm = { idPrenda, cantidad->
                 showEditDialog = false
                 onEdit(idPrenda, cantidad)
             }

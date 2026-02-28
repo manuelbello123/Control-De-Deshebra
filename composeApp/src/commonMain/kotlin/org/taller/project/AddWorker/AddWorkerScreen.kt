@@ -249,8 +249,17 @@ fun AddWorkerScreen(
                             ) {
                                 WorkerCard(
                                     trabajador = trabajador,
-                                    onToggleActivo = { viewModel.toggleActivo(trabajador) }
+                                    onToggleActivo = { viewModel.toggleActivo(trabajador) },
+                                    onEdit = { nombre, usuario ->
+                                        viewModel.actualizarTrabajador(
+                                            trabajador.copy(
+                                                nombre = nombre,
+                                                usuario = usuario
+                                            )
+                                        )
+                                    }
                                 )
+                            }
 
                                 Spacer(modifier = Modifier.height(12.dp))
                             }
@@ -272,4 +281,3 @@ fun AddWorkerScreen(
             )
         }
     }
-}

@@ -97,6 +97,9 @@ fun HomeWorkerScreen(
     }
 
     Scaffold(
+        topBar = {
+
+        },
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
