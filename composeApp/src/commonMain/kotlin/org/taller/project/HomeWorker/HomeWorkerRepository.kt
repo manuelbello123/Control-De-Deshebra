@@ -7,6 +7,7 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.io.IOException
@@ -20,8 +21,8 @@ class HomeWorkerRepository(private val client: HttpClient) {
     private val baseUrl = "http://3.131.91.29"
 
     // ── GET: Obtener trabajadores activos con su producción del día ────
-    suspend fun getTrabajadoresConProduccion(): HomeWorkerResult = coroutineScope {
-        return@coroutineScope try {
+    suspend fun getTrabajadoresConProduccion(): HomeWorkerResult = supervisorScope  {
+        return@supervisorScope  try {
 
             // Llamadas paralelas
             val trabajadoresDeferred = async {
@@ -67,7 +68,8 @@ class HomeWorkerRepository(private val client: HttpClient) {
 
             HomeWorkerResult.Success(resultado)
 
-        } catch (e: ClientRequestException) {
+        }
+        catch (e: ClientRequestException) {
             HomeWorkerResult.Error("Error al obtener datos: ${e.response.status.description}")
 
         } catch (e: ServerResponseException) {

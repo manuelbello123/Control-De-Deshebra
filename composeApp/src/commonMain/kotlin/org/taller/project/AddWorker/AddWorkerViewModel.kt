@@ -27,10 +27,6 @@ class AddWorkerViewModel(
     private val _state = MutableStateFlow(WorkerState())
     val state: StateFlow<WorkerState> = _state.asStateFlow()
 
-    /*init {
-        cargarTrabajadores()
-    }*/
-
     // ── Obtener lista de trabajadores ──────────────────────────────────
     fun cargarTrabajadores() {
         viewModelScope.launch {

@@ -15,10 +15,6 @@ class AddUserViewModel(
     private val _state = MutableStateFlow(UserState())
     val state: StateFlow<UserState> = _state.asStateFlow()
 
-    /*init {
-        cargarUsuarios()
-    }*/
-
     // ── Obtener lista de usuarios ──────────────────────────────────────
     fun cargarUsuarios() {
         viewModelScope.launch {

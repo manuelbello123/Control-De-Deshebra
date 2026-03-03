@@ -97,9 +97,6 @@ fun HomeWorkerScreen(
     }
 
     Scaffold(
-        topBar = {
-
-        },
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
@@ -121,6 +118,66 @@ fun HomeWorkerScreen(
                     },
                     shape = RoundedCornerShape(12.dp)
                 )
+            }
+        },
+        floatingActionButton = {
+            Column(
+                modifier = Modifier
+                    .padding(bottom = 100.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+
+                AnimatedVisibility(visible = expanded) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalAlignment = Alignment.End
+                    ) {
+
+                        SmallActionButton(
+                            text = "Trabajadores",
+                            icon = Icons.Outlined.Person,
+                            primaryColor = Color(0xFF001427)
+                        ) {
+                            expanded = false
+                            navController.navigate(Routes.ADD_WORKER)
+                        }
+
+                        SmallActionButton(
+                            text = "Usuarios",
+                            icon = Icons.Outlined.Badge,
+                            primaryColor = Color(0xFF001427)
+                        ) {
+                            expanded = false
+                            navController.navigate(Routes.ADD_USER)
+                        }
+
+                        SmallActionButton(
+                            text = "Prendas",
+                            icon = Icons.Outlined.Checkroom,
+                            primaryColor = Color(0xFF001427)
+                        ) {
+                            expanded = false
+                            navController.navigate(Routes.ADD_GARMENT)
+                        }
+                    }
+                }
+
+                FloatingActionButton(
+                    onClick = { expanded = !expanded },
+                    containerColor = Color(0xFF001427),
+                    shape = RoundedCornerShape(18.dp),
+                    elevation = FloatingActionButtonDefaults.elevation(6.dp)
+                ) {
+                    Icon(
+                        imageVector = if (expanded)
+                            Icons.Outlined.Close
+                        else
+                            Icons.Outlined.Add,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
             }
         }
     ) { paddingValues ->
@@ -184,136 +241,75 @@ fun HomeWorkerScreen(
                 }
 
                 // ── Estado: Con datos ─────────────────────────────────
-                    this@Column.AnimatedVisibility(
-                        visible = !state.isLoading && state.trabajadores.isNotEmpty(),
-                        enter = fadeIn(),
-                        exit = fadeOut()
-                    ) {
-
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = PaddingValues(bottom = 80.dp)
-                        ) {
-                            item {
-                                Text(
-                                    text = "${state.trabajadores.size} trabajadores activos",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = Color(0xFF001427).copy(alpha = 0.7f)
-                                )
-                            }
-
-                            itemsIndexed(
-                                items = state.trabajadores,
-                                key = { _, trabajador -> trabajador.idTrabajador }
-                            ) { index, trabajador ->
-
-                                val offsetX = remember { Animatable(300f) }
-                                val alpha = remember { Animatable(0f) }
-
-                                LaunchedEffect(trabajador.idTrabajador) {
-                                    launch {
-                                        offsetX.animateTo(
-                                            targetValue = 0f,
-                                            animationSpec = tween(
-                                                durationMillis = 500,
-                                                delayMillis = index * 80
-                                            )
-                                        )
-                                    }
-                                    launch {
-                                        alpha.animateTo(
-                                            targetValue = 1f,
-                                            animationSpec = tween(
-                                                durationMillis = 400,
-                                                delayMillis = index * 80
-                                            )
-                                        )
-                                    }
-                                }
-
-                                Column(
-                                    modifier = Modifier
-                                        .offset(x = offsetX.value.dp)
-                                        .graphicsLayer { this.alpha = alpha.value }
-                                ) {
-                                    HomeWorkerCard(
-                                        trabajador = trabajador,
-                                        onClick = {
-                                            navController.navigate(
-                                                ProduccionTrabajadorDetalle(
-                                                    trabajador.idTrabajador,
-                                                    trabajador.nombre
-                                                )
-                                            )
-                                        }
-                                    )
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                }
-                            }
-                        }
-                    }
-
-                    // ── FAB ─────────────────────────────────────────────────────
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(bottom = 100.dp),
+                this@Column.AnimatedVisibility(
+                    visible = !state.isLoading && state.trabajadores.isNotEmpty(),
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalAlignment = Alignment.End
+                        contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
-
-                        AnimatedVisibility(visible = expanded) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(12.dp),
-                                horizontalAlignment = Alignment.End
-                            ) {
-
-                                SmallActionButton(
-                                    text = "Trabajadores",
-                                    icon = Icons.Outlined.Person,
-                                    primaryColor = Color(0xFF001427)
-                                ) {
-                                    expanded = false
-                                    navController.navigate(Routes.ADD_WORKER)
-                                }
-
-                                SmallActionButton(
-                                    text = "Usuarios",
-                                    icon = Icons.Outlined.Badge,
-                                    primaryColor = Color(0xFF001427)
-                                ) {
-                                    expanded = false
-                                    navController.navigate(Routes.ADD_USER)
-                                }
-
-                                SmallActionButton(
-                                    text = "Prendas",
-                                    icon = Icons.Outlined.Checkroom,
-                                    primaryColor = Color(0xFF001427)
-                                ) {
-                                    expanded = false
-                                    navController.navigate(Routes.ADD_GARMENT)
-                                }
-                            }
-                        }
-
-                        FloatingActionButton(
-                            onClick = { expanded = !expanded },
-                            containerColor = Color(0xFF001427),
-                            shape = RoundedCornerShape(18.dp),
-                            elevation = FloatingActionButtonDefaults.elevation(6.dp)
-                        ) {
-                            Icon(
-                                imageVector = if (expanded)
-                                    Icons.Outlined.Close
-                                else
-                                    Icons.Outlined.Add,
-                                contentDescription = null,
-                                tint = Color.White
+                        // ── Contador de trabajadores activos ───────────────────────────────
+                        item {
+                            Text(
+                                text = "${state.trabajadores.size} trabajadores activos",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Color(0xFF001427).copy(alpha = 0.7f)
                             )
                         }
+                        // ── Lista de trabajadores ──────────────────────────────────
+                        itemsIndexed(
+                            items = state.trabajadores,
+                            key = { _, trabajador -> trabajador.idTrabajador }
+                        ) { index, trabajador ->
+
+                            val offsetX = remember { Animatable(300f) }
+                            val alpha = remember { Animatable(0f) }
+
+                            LaunchedEffect(trabajador.idTrabajador) {
+                                launch {
+                                    offsetX.animateTo(
+                                        targetValue = 0f,
+                                        animationSpec = tween(
+                                            durationMillis = 500,
+                                            delayMillis = index * 80
+                                        )
+                                    )
+                                }
+                                launch {
+                                    alpha.animateTo(
+                                        targetValue = 1f,
+                                        animationSpec = tween(
+                                            durationMillis = 400,
+                                            delayMillis = index * 80
+                                        )
+                                    )
+                                }
+                            }
+
+                            Column(
+                                modifier = Modifier
+                                    .offset(x = offsetX.value.dp)
+                                    .graphicsLayer { this.alpha = alpha.value }
+                            ) {
+                                HomeWorkerCard(
+                                    trabajador = trabajador,
+                                    onClick = {
+                                        navController.navigate(
+                                            ProduccionTrabajadorDetalle(
+                                                trabajador.idTrabajador,
+                                                trabajador.nombre
+                                            )
+                                        )
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
+                        }
                     }
+                }
 
 
             }

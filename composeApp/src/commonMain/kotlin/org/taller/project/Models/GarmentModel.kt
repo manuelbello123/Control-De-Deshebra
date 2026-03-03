@@ -13,3 +13,12 @@ data class PrendaDto(
     @SerialName("modelo")     val modelo: String,
     @SerialName("precio")     val precio: Double
 )
+@Serializable
+data class CreatePrendaRequest(
+    val id_pieza: Int,
+    val id_color: Int,
+    val id_talla: Int,
+    val id_tipo: Int,
+    val id_modelo: Int,
+    val id_precio: Int
+)

@@ -30,7 +30,7 @@ object Routes {
         ),
 
         TOTAL_WEEKLY to HeaderData(
-            title = "Total semanal",
+            title = "Totales semanales",
             subtitle = "Resumen de producción y pagos"
         ),
 

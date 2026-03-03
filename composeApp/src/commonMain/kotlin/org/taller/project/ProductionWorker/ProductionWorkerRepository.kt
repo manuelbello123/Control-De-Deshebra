@@ -13,6 +13,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.toLocalDateTime
@@ -72,8 +73,8 @@ class ProductionWorkerRepository(private val client: HttpClient) {
     }
 
     // ── GET: Producción de la semana actual (expandida) ────────────────
-    suspend fun getProduccionSemanaActual(idTrabajador: Int): ProduccionSemanalResult = coroutineScope {
-        return@coroutineScope try {
+    suspend fun getProduccionSemanaActual(idTrabajador: Int): ProduccionSemanalResult = supervisorScope  {
+        return@supervisorScope  try {
 
             val semanaIso = semanaIsoActual()
 

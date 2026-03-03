@@ -15,10 +15,6 @@ class HomeWorkerViewModel(
     private val _state = MutableStateFlow(HomeWorkerState())
     val state: StateFlow<HomeWorkerState> = _state.asStateFlow()
 
-    /*init {
-        cargarTrabajadores()
-    }
-*/
     // ── Obtener trabajadores activos con producción del día ────────────
     fun cargarTrabajadores() {
         viewModelScope.launch {

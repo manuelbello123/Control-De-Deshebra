@@ -25,10 +25,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -36,6 +40,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,6 +49,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
@@ -87,6 +94,7 @@ fun HistoryScreen(
     }
 
     Scaffold(
+        containerColor = Color.Transparent,
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
@@ -109,6 +117,25 @@ fun HistoryScreen(
                     shape = RoundedCornerShape(12.dp)
                 )
             }
+        },
+        bottomBar = {
+            NavigationBar(
+                modifier = Modifier
+                    .size(97.dp)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                containerColor = Color.Transparent,
+                tonalElevation = 0.dp
+            ) {
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { },
+                    icon = {},
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = Color.Transparent
+                    )
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -124,6 +151,8 @@ fun HistoryScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
+
+                // ── Estado: Cargando ──────────────────────────────────
                 this@Column.AnimatedVisibility(
                     visible = state.isLoading,
                     enter = fadeIn(),
@@ -147,7 +176,8 @@ fun HistoryScreen(
 
                 // Estado: sin datos
                 this@Column.AnimatedVisibility(
-                    visible = !state.isLoading && state.historial.isEmpty() && state.error == null,
+                    visible = !state.isLoading && state.historial.isEmpty(),
+                            //&& state.error == null,
                     enter = fadeIn(),
                     exit = fadeOut(),
                     modifier = Modifier.align(Alignment.Center)
@@ -178,7 +208,7 @@ fun HistoryScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(bottom = 80.dp)
+                        //contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
                         // Total de registros
                         item {

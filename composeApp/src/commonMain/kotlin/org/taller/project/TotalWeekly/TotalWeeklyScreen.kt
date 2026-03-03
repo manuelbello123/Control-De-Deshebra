@@ -30,6 +30,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Snackbar
@@ -45,6 +48,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
@@ -81,6 +85,7 @@ fun TotalWeeklyScreen(
     }
 
     Scaffold(
+        containerColor = Color.Transparent,
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
@@ -103,6 +108,25 @@ fun TotalWeeklyScreen(
                     shape = RoundedCornerShape(12.dp)
                 )
             }
+        },
+        bottomBar = {
+            NavigationBar(
+                modifier = Modifier
+                    .size(97.dp)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                containerColor = Color.Transparent,
+                tonalElevation = 0.dp
+            ) {
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { },
+                    icon = {},
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = Color.Transparent
+                    )
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -117,6 +141,7 @@ fun TotalWeeklyScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
+
                 // ── Estado: Cargando ──────────────────────────────────
                 this@Column.AnimatedVisibility(
                     visible = state.isLoading,
@@ -163,6 +188,7 @@ fun TotalWeeklyScreen(
                         )
                     }
                 }
+
                 // ── Estado: Con datos ─────────────────────────────────
                 this@Column.AnimatedVisibility(
                     visible = !state.isLoading && state.totales.isNotEmpty(),
@@ -172,7 +198,7 @@ fun TotalWeeklyScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(bottom = 80.dp)
+                        //contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
                         // ── Contador de semanas ───────────────────────────────
                         item {
