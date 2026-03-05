@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.AdminPanelSettings
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material3.Card
@@ -36,6 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import org.taller.project.Models.UsuarioDto
 
 
@@ -44,19 +47,71 @@ import org.taller.project.Models.UsuarioDto
 fun UserCard(
     usuario: UsuarioDto,
     onToggleActivo: () -> Unit,
-    onDelete: () -> Unit
+    onEdit: (username: String, rol: String) -> Unit
 ) {
+    var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+
     val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { dismissValue ->
-            if (dismissValue == SwipeToDismissBoxValue.EndToStart) {
-                showDeleteDialog = true
-                false
-            } else {
-                false
+        confirmValueChange = { value ->
+            when (value) {
+                SwipeToDismissBoxValue.StartToEnd -> {
+                    showDeleteDialog = true
+                    false
+                }
+                SwipeToDismissBoxValue.EndToStart -> {
+                    showEditDialog = true
+                    false
+                }
+                else -> false
             }
         }
     )
+
+    SwipeToDismissBox(
+        state = dismissState,
+        backgroundContent = {
+            when (dismissState.dismissDirection) {
+                SwipeToDismissBoxValue.StartToEnd -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFFD32F2F), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 24.dp),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(Icons.Default.Delete, null, tint = Color.White, modifier = Modifier.size(28.dp))
+                            Text("Eliminar", color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+                SwipeToDismissBoxValue.EndToStart -> {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFF001427), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 24.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text("Editar", color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Icon(Icons.Outlined.Edit, null, tint = Color.White, modifier = Modifier.size(28.dp))
+                        }
+                    }
+                }
+                else -> {}
+            }
+        },
+        enableDismissFromStartToEnd = true,
+        enableDismissFromEndToStart = true
+    ) {
         // Contenido de la card
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -165,5 +220,39 @@ fun UserCard(
                 }
             }
         }
+    }
+    // Dialog de eliminacion
+    if (showDeleteDialog) {
+        DeleteUserDialog(
+            username = usuario.username,
+            onConfirm = {
+                showDeleteDialog = false
+                onToggleActivo()
+            },
+            onDismiss = {
+                showDeleteDialog = false
+                kotlinx.coroutines.MainScope().launch {
+                    dismissState.reset()
+                }
+            }
+        )
+    }
 
+    // Dialog de edición
+    if (showEditDialog) {
+        EditUserDialog(
+            usuario = usuario,
+            isUpdating = false,  // Puedes conectar esto al state del ViewModel
+            onDismiss = {
+                showEditDialog = false
+                kotlinx.coroutines.MainScope().launch {
+                    dismissState.reset()
+                }
+            },
+            onConfirm = { username, rol->
+                showEditDialog = false
+                onEdit(username, rol)
+            }
+        )
+    }
 }

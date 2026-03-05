@@ -23,7 +23,7 @@ class AddGarmentViewModel(
         }
     }
 
-    private fun cargarPrendas() {
+    fun cargarPrendas() {
         viewModelScope.launch {
             when (val result = repository.getPrendas()) {
                 is PrendasResult.Success -> {
@@ -42,7 +42,7 @@ class AddGarmentViewModel(
         }
     }
 
-    private fun cargarCatalogos() {
+    fun cargarCatalogos() {
         viewModelScope.launch {
             launch { cargarPiezas() }
             launch { cargarColores() }
@@ -153,6 +153,38 @@ class AddGarmentViewModel(
                 is CreatePrendaResult.Error -> {
                     _state.value = _state.value.copy(
                         isCreating = false,
+                        error = result.message
+                    )
+                }
+            }
+        }
+    }
+
+    fun actualizarPrendas(
+        idPrenda: Int,
+        idPieza: Int,
+        idColor: Int,
+        idTalla: Int,
+        idTipo: Int,
+        idModelo: Int,
+        idPrecio: Int
+    ) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isUpdating = true, error = null)
+
+            when (val result = repository.updatePrendas(
+                idPrenda, idPieza, idColor, idTalla, idTipo, idModelo, idPrecio
+            )) {
+                is UpdatePrendaResult.Success -> {
+                    _state.value = _state.value.copy(
+                        isUpdating = false,
+                        successMessage = "Prenda actualizada exitosamente"
+                    )
+                    cargarPrendas()
+                }
+                is UpdatePrendaResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isUpdating = false,
                         error = result.message
                     )
                 }
@@ -512,11 +544,11 @@ class AddGarmentViewModel(
         }
     }
 
-    fun crearPrecios(nombre: String) {
+    fun crearPrecios(precio: Double) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isCreating = true, error = null)
 
-            when (val result = repository.createPrecios(nombre)) {
+            when (val result = repository.createPrecios(precio)) {
                 is CrudCatalogoResult.Success -> {
                     _state.value = _state.value.copy(
                         isCreating = false,
@@ -534,11 +566,11 @@ class AddGarmentViewModel(
         }
     }
 
-    fun actualizarPrecios(id: Int, nombre: String) {
+    fun actualizarPrecios(id: Int, precio: Double) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isCreating = true, error = null)
 
-            when (val result = repository.updatePrecios(id, nombre)) {
+            when (val result = repository.updatePrecios(id, precio)) {
                 is CrudCatalogoResult.Success -> {
                     _state.value = _state.value.copy(
                         isCreating = false,

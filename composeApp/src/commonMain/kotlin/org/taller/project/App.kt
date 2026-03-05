@@ -33,7 +33,7 @@ fun App() {
             topBar = {
                 if (showTopBar && headerData != null) {
                     TopBar {
-                        ScreenHeader(headerData)
+                        ScreenHeader(headerData, navController)
                     }
                 }
             },

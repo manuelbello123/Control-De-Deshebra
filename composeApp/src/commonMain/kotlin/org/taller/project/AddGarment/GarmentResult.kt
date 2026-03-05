@@ -11,6 +11,10 @@ sealed class CreatePrendaResult {
     object Success : CreatePrendaResult()
     data class Error(val message: String) : CreatePrendaResult()
 }
+sealed class UpdatePrendaResult {
+    object Success : UpdatePrendaResult()
+    data class Error(val message: String) : UpdatePrendaResult()
+}
 
 sealed class DeletePrendaResult {
     object Success : DeletePrendaResult()

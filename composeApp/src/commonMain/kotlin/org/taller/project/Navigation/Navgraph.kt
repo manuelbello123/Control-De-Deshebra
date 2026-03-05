@@ -9,7 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import org.taller.project.AddGarment.AddGarmentRepository
 import org.taller.project.AddGarment.AddGarmentScreen
+import org.taller.project.AddGarment.AddGarmentViewModel
 import org.taller.project.AddUser.AddUserRepository
 import org.taller.project.AddUser.AddUserScreen
 import org.taller.project.AddUser.AddUserViewModel
@@ -88,6 +90,13 @@ fun AppNavGraph(navController: NavHostController) {
             )
         )
     }
+    val addGarmentViewModel = remember {
+        AddGarmentViewModel(
+            repository = AddGarmentRepository(
+                client = NetworkUtils.buildHttpClient(sessionManager)
+            )
+        )
+    }
     val totalWeeklyViewModel = remember {
         TotalWeeklyViewModel(
             repository = TotalWeeklyRepository(
@@ -127,7 +136,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(Routes.ADD_GARMENT) {
-            AddGarmentScreen(navController)
+            AddGarmentScreen(navController, addGarmentViewModel)
         }
 
         composable(Routes.HISTORY) {

@@ -126,7 +126,7 @@ class AddUserViewModel(
 
                     _state.value = _state.value.copy(
                         usuarios = nuevaLista,
-                        successMessage = "Usuario desactivado",
+                        successMessage = "Usuario eliminado exitosamente",
                         error = null
                     )
                 }

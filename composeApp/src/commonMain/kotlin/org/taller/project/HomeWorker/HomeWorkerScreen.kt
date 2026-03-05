@@ -249,7 +249,7 @@ fun HomeWorkerScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(bottom = 80.dp)
+                        contentPadding = PaddingValues(bottom = 160.dp)
                     ) {
                         // ── Contador de trabajadores activos ───────────────────────────────
                         item {

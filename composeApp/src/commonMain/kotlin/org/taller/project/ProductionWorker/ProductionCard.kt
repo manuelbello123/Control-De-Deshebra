@@ -59,15 +59,13 @@ fun ProductionCard(
     var showEditDialog by remember { mutableStateOf(false) }
 
     val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { dismissValue ->
-            when (dismissValue) {
+        confirmValueChange = { value ->
+            when (value) {
                 SwipeToDismissBoxValue.StartToEnd -> {
-                    // Swipe izquierda → derecha = Eliminar
                     showDeleteDialog = true
                     false
                 }
                 SwipeToDismissBoxValue.EndToStart -> {
-                    // Swipe derecha → izquierda = Editar
                     showEditDialog = true
                     false
                 }
@@ -79,77 +77,46 @@ fun ProductionCard(
     SwipeToDismissBox(
         state = dismissState,
         backgroundContent = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-
-                Row(modifier = Modifier.fillMaxSize()) {
-
-                    // LADO ELIMINAR
+            when (dismissState.dismissDirection) {
+                SwipeToDismissBoxValue.StartToEnd -> {
                     Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .background(Color(0xFFD32F2F)),
+                            .fillMaxSize()
+                            .background(Color(0xFFD32F2F), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 24.dp),
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Row(
-                            modifier = Modifier.padding(start = 24.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Eliminar",
-                                tint = Color.White,
-                                modifier = Modifier.size(26.dp)
-                            )
-
-                            Text(
-                                text = "Eliminar",
-                                color = Color.White,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    // LADO EDITAR
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .background(Color(0xFF001427)),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(end = 24.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-
-                            Text(
-                                text = "Editar",
-                                color = Color.White,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Icon(
-                                imageVector = Icons.Outlined.Edit,
-                                contentDescription = "Editar",
-                                tint = Color.White,
-                                modifier = Modifier.size(26.dp)
-                            )
+                            Icon(Icons.Default.Delete, null, tint = Color.White, modifier = Modifier.size(28.dp))
+                            Text("Eliminar", color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
+                SwipeToDismissBoxValue.EndToStart -> {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFF001427), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 24.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text("Editar", color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Icon(Icons.Outlined.Edit, null, tint = Color.White, modifier = Modifier.size(28.dp))
+                        }
+                    }
+                }
+                else -> {}
             }
         },
-        enableDismissFromStartToEnd = true,  // Permite eliminar
-        enableDismissFromEndToStart = true   // Permite editar
+        enableDismissFromStartToEnd = true,
+        enableDismissFromEndToStart = true
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),

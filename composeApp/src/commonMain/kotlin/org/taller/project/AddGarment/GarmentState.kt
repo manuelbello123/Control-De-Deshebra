@@ -1,25 +1,23 @@
 package org.taller.project.AddGarment
 
-import org.taller.project.Models.ColorDto
-import org.taller.project.Models.ModeloDto
-import org.taller.project.Models.PiezaDto
+import org.taller.project.Models.CatalogoSimpleDto
 import org.taller.project.Models.PrecioDto
 import org.taller.project.Models.PrendaDto
-import org.taller.project.Models.TallaDto
-import org.taller.project.Models.TipoDto
 
 data class GarmentState(
     val isLoading: Boolean = false,
     val prendas: List<PrendaDto> = emptyList(),
-    val piezas: List<PiezaDto> = emptyList(),
-    val colores: List<ColorDto> = emptyList(),
-    val tallas: List<TallaDto> = emptyList(),
-    val tipos: List<TipoDto> = emptyList(),
-    val modelos: List<ModeloDto> = emptyList(),
+
+    val piezas: List<CatalogoSimpleDto> = emptyList(),
+    val colores: List<CatalogoSimpleDto> = emptyList(),
+    val tallas: List<CatalogoSimpleDto> = emptyList(),
+    val tipos: List<CatalogoSimpleDto> = emptyList(),
+    val modelos: List<CatalogoSimpleDto> = emptyList(),
+
     val precios: List<PrecioDto> = emptyList(),
     val error: String? = null,
     val successMessage: String? = null,
     val isCreating: Boolean = false,
+    val isUpdating: Boolean = false,
     val isDeleting: Boolean = false
-) {
-}
+)

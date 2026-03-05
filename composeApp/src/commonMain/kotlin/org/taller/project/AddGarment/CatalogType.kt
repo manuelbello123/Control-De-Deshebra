@@ -1,6 +1,6 @@
 package org.taller.project.AddGarment
 
-enum class TipoCatalogo(val ruta: String, val display: String) {
+enum class TipoCatalogo(val ruta: String, val nombreDisplay: String) {
     PIEZAS("piezas", "Piezas"),
     COLORES("colores", "Colores"),
     TALLAS("tallas", "Tallas"),

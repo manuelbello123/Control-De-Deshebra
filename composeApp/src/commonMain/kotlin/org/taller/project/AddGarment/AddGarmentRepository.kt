@@ -12,16 +12,15 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.io.IOException
-import org.taller.project.Models.ColorDto
+import org.taller.project.AddUser.UpdateUserResult
+import org.taller.project.Models.CatalogoSimpleDto
 import org.taller.project.Models.CreateCatalogoRequest
+import org.taller.project.Models.CreatePrecioRequest
 import org.taller.project.Models.CreatePrendaRequest
-import org.taller.project.Models.ModeloDto
-import org.taller.project.Models.PiezaDto
 import org.taller.project.Models.PrecioDto
 import org.taller.project.Models.PrendaDto
-import org.taller.project.Models.TallaDto
-import org.taller.project.Models.TipoDto
 import org.taller.project.Models.UpdateCatalogoRequest
+import org.taller.project.Models.UpdatePrecioRequest
 
 class AddGarmentRepository(private val client: HttpClient) {
 
@@ -34,9 +33,11 @@ class AddGarmentRepository(private val client: HttpClient) {
         } catch (e: ClientRequestException) {
             PrendasResult.Error("Error: ${e.response.status.description}")
         } catch (e: ServerResponseException) {
-            PrendasResult.Error("Error del servidor")
+            PrendasResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            PrendasResult.Error("Sin conexión a internet")
+            PrendasResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
             PrendasResult.Error("Error inesperado: ${e.message}")
         }
@@ -59,11 +60,58 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CreatePrendaResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CreatePrendaResult.Error("Error del servidor")
+            CreatePrendaResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CreatePrendaResult.Error("Sin conexión")
+            CreatePrendaResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CreatePrendaResult.Error("Error: ${e.message}")
+            CreatePrendaResult.Error("Error inesperado: ${e.message}")
+        }
+    }
+
+    suspend fun updatePrendas(
+        idPrenda: Int,
+        idPieza: Int,
+        idColor: Int,
+        idTalla: Int,
+        idTipo: Int,
+        idModelo: Int,
+        idPrecio: Int
+    ): UpdatePrendaResult {
+        return try {
+
+            client.put("$baseUrl/prendas/$idPrenda") {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    CreatePrendaRequest(
+                        id_pieza = idPieza,
+                        id_color = idColor,
+                        id_talla = idTalla,
+                        id_tipo = idTipo,
+                        id_modelo = idModelo,
+                        id_precio = idPrecio
+                    )
+                )
+            }
+
+            UpdatePrendaResult.Success
+
+        } catch (e: ClientRequestException) {
+            when (e.response.status.value) {
+                404 -> UpdatePrendaResult.Error("Prenda no encontrada")
+                401 -> UpdatePrendaResult.Error("No autorizado")
+                400 -> UpdatePrendaResult.Error("Datos inválidos")
+                else -> UpdatePrendaResult.Error("Error: ${e.response.status.description}")
+            }
+        } catch (e: ServerResponseException) {
+            UpdatePrendaResult.Error("Error del servidor. Intenta más tarde.")
+
+        } catch (e: IOException) {
+            UpdatePrendaResult.Error("Sin conexión a internet. Verifica tu red.")
+
+        } catch (e: Exception) {
+            UpdatePrendaResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -78,26 +126,30 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> DeletePrendaResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            DeletePrendaResult.Error("Error del servidor")
+            DeletePrendaResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            DeletePrendaResult.Error("Sin conexión")
+            DeletePrendaResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            DeletePrendaResult.Error("Error: ${e.message}")
+            DeletePrendaResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun getPiezas(): CatalogosResult<PiezaDto> {
+    suspend fun getPiezas(): CatalogosResult<CatalogoSimpleDto> {
         return try {
-            val items: List<PiezaDto> = client.get("$baseUrl/piezas").body()
+            val items: List<CatalogoSimpleDto> = client.get("$baseUrl/piezas").body()
             CatalogosResult.Success(items)
         } catch (e: ClientRequestException) {
             CatalogosResult.Error("Error: ${e.response.status.description}")
         } catch (e: ServerResponseException) {
-            CatalogosResult.Error("Error del servidor")
+            CatalogosResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CatalogosResult.Error("Sin conexión")
+            CatalogosResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CatalogosResult.Error("Error: ${e.message}")
+            CatalogosResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -116,11 +168,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -139,11 +193,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -158,20 +214,30 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun getColores(): CatalogosResult<ColorDto> {
+    suspend fun getColores(): CatalogosResult<CatalogoSimpleDto> {
         return try {
-            val items: List<ColorDto> = client.get("$baseUrl/colores").body()
+            val items: List<CatalogoSimpleDto> = client.get("$baseUrl/colores").body()
             CatalogosResult.Success(items)
+        } catch (e: ClientRequestException) {
+            CatalogosResult.Error("Error: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            CatalogosResult.Error("Error del servidor. Intenta más tarde.")
+
+        } catch (e: IOException) {
+            CatalogosResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CatalogosResult.Error("Error: ${e.message}")
+            CatalogosResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -190,11 +256,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -213,11 +281,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -232,20 +302,30 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun getTallas(): CatalogosResult<TallaDto> {
+    suspend fun getTallas(): CatalogosResult<CatalogoSimpleDto> {
         return try {
-            val items: List<TallaDto> = client.get("$baseUrl/tallas").body()
+            val items: List<CatalogoSimpleDto> = client.get("$baseUrl/tallas").body()
             CatalogosResult.Success(items)
+        } catch (e: ClientRequestException) {
+            CatalogosResult.Error("Error: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            CatalogosResult.Error("Error del servidor. Intenta más tarde.")
+
+        } catch (e: IOException) {
+            CatalogosResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CatalogosResult.Error("Error: ${e.message}")
+            CatalogosResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -264,11 +344,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -287,11 +369,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -306,20 +390,30 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun getTipos(): CatalogosResult<TipoDto> {
+    suspend fun getTipos(): CatalogosResult<CatalogoSimpleDto> {
         return try {
-            val items: List<TipoDto> = client.get("$baseUrl/tipos").body()
+            val items: List<CatalogoSimpleDto> = client.get("$baseUrl/tipos").body()
             CatalogosResult.Success(items)
+        } catch (e: ClientRequestException) {
+            CatalogosResult.Error("Error: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            CatalogosResult.Error("Error del servidor. Intenta más tarde.")
+
+        } catch (e: IOException) {
+            CatalogosResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CatalogosResult.Error("Error: ${e.message}")
+            CatalogosResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -338,11 +432,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -361,11 +457,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -380,20 +478,30 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun getModelos(): CatalogosResult<ModeloDto> {
+    suspend fun getModelos(): CatalogosResult<CatalogoSimpleDto> {
         return try {
-            val items: List<ModeloDto> = client.get("$baseUrl/modelos").body()
+            val items: List<CatalogoSimpleDto> = client.get("$baseUrl/modelos").body()
             CatalogosResult.Success(items)
+        } catch (e: ClientRequestException) {
+            CatalogosResult.Error("Error: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            CatalogosResult.Error("Error del servidor. Intenta más tarde.")
+
+        } catch (e: IOException) {
+            CatalogosResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CatalogosResult.Error("Error: ${e.message}")
+            CatalogosResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -412,11 +520,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -435,11 +545,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -454,11 +566,13 @@ class AddGarmentRepository(private val client: HttpClient) {
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
@@ -466,73 +580,97 @@ class AddGarmentRepository(private val client: HttpClient) {
         return try {
             val items: List<PrecioDto> = client.get("$baseUrl/precios").body()
             CatalogosResult.Success(items)
+        } catch (e: ClientRequestException) {
+            CatalogosResult.Error("Error: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            CatalogosResult.Error("Error del servidor. Intenta más tarde.")
+
+        } catch (e: IOException) {
+            CatalogosResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CatalogosResult.Error("Error: ${e.message}")
+            CatalogosResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun createPrecios(nombre: String): CrudCatalogoResult {
+    suspend fun createPrecios(precio: Double): CrudCatalogoResult {
         return try {
-            if (nombre.isBlank()) return CrudCatalogoResult.Error("El nombre no puede estar vacío")
+            if (precio <= 0) return CrudCatalogoResult.Error("El precio debe ser mayor a 0")
+
             client.post("$baseUrl/precios") {
                 contentType(ContentType.Application.Json)
-                setBody(CreateCatalogoRequest(nombre))
+                setBody(CreatePrecioRequest(precio = precio))
             }
+
             CrudCatalogoResult.Success
+
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
-                403 -> CrudCatalogoResult.Error("Solo ADMIN puede crear")
+                403 -> CrudCatalogoResult.Error("Solo ADMIN puede crear precios")
                 401 -> CrudCatalogoResult.Error("No autorizado")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
-    suspend fun updatePrecios(id: Int, nombre: String): CrudCatalogoResult {
+    suspend fun updatePrecios(id: Int, precio: Double): CrudCatalogoResult {
         return try {
-            if (nombre.isBlank()) return CrudCatalogoResult.Error("El nombre no puede estar vacío")
+            if (precio <= 0) return CrudCatalogoResult.Error("El precio debe ser mayor a 0")
+
             client.put("$baseUrl/precios/$id") {
                 contentType(ContentType.Application.Json)
-                setBody(UpdateCatalogoRequest(nombre))
+                setBody(UpdatePrecioRequest(precio = precio))
             }
+
             CrudCatalogoResult.Success
+
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
-                403 -> CrudCatalogoResult.Error("Solo ADMIN puede actualizar")
-                404 -> CrudCatalogoResult.Error("No encontrado")
+                403 -> CrudCatalogoResult.Error("Solo ADMIN puede actualizar precios")
+                404 -> CrudCatalogoResult.Error("Precio no encontrado")
+                401 -> CrudCatalogoResult.Error("No autorizado")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 
     suspend fun deletePrecios(id: Int): CrudCatalogoResult {
         return try {
             client.delete("$baseUrl/precios/$id")
+
             CrudCatalogoResult.Success
+
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
-                403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar")
-                404 -> CrudCatalogoResult.Error("No encontrado")
+                403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar precios")
+                404 -> CrudCatalogoResult.Error("Precio no encontrado")
+                401 -> CrudCatalogoResult.Error("No autorizado")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
-            CrudCatalogoResult.Error("Error del servidor")
+            CrudCatalogoResult.Error("Error del servidor. Intenta más tarde.")
+
         } catch (e: IOException) {
-            CrudCatalogoResult.Error("Sin conexión")
+            CrudCatalogoResult.Error("Sin conexión a internet. Verifica tu red.")
+
         } catch (e: Exception) {
-            CrudCatalogoResult.Error("Error: ${e.message}")
+            CrudCatalogoResult.Error("Error inesperado: ${e.message}")
         }
     }
 }

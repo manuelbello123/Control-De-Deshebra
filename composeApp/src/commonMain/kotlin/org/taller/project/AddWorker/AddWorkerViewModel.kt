@@ -137,7 +137,7 @@ class AddWorkerViewModel(
 
                     _state.value = _state.value.copy(
                         trabajadores = nuevaLista,
-                        successMessage = "Trabajador desactivado",
+                        successMessage = "Trabajador eliminado exitosamente",
                         error = null
                     )
                 }

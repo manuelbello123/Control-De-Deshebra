@@ -249,7 +249,14 @@ fun AddUserScreen(
                                 UserCard(
                                     usuario = usuario,
                                     onToggleActivo = { viewModel.toggleActivo(usuario) },
-                                    onDelete = { viewModel.eliminarUsuario(usuario.idUsuario) }
+                                    onEdit = { username, rol ->
+                                        viewModel.actualizarUsuario(
+                                            usuario.copy(
+                                                username = username,
+                                                rol = rol
+                                            )
+                                        )
+                                    }
                                 )
 
                                 Spacer(modifier = Modifier.height(12.dp))
