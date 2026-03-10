@@ -106,7 +106,8 @@ fun AddUserDialog(
                         focusedLabelColor = Color(0xFF001427),
                         cursorColor = Color(0xFF001427)
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
                 )
 
                 // Campo: Password
@@ -149,7 +150,8 @@ fun AddUserDialog(
                         focusedLabelColor = Color(0xFF001427),
                         cursorColor = Color(0xFF001427)
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
                 )
 
                 // Campo: Rol (Dropdown)
@@ -179,13 +181,15 @@ fun AddUserDialog(
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .menuAnchor()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp),
                     )
 
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
-                        modifier = Modifier.background(Color.White)
+                        modifier = Modifier.background(Color.White),
+                        shape = RoundedCornerShape(12.dp),
                     ) {
                         DropdownMenuItem(
                             text = { Text("ADMIN") },
@@ -225,6 +229,7 @@ fun AddUserDialog(
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Color(0xFF001427)
                         ),
@@ -237,6 +242,7 @@ fun AddUserDialog(
                     Button(
                         onClick = { onConfirm(username, password, selectedRol) },
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF001427),
                             contentColor = Color.White

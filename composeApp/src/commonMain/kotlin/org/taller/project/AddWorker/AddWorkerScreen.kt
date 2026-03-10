@@ -133,6 +133,10 @@ fun AddWorkerScreen(
         }
     ) { paddingValues ->
 
+        val trabajadoresActivos = remember(state.trabajadores) {
+            state.trabajadores.filter { !it.isDeleted }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -214,7 +218,7 @@ fun AddWorkerScreen(
                         }
 
                         itemsIndexed(
-                            items = state.trabajadores,
+                            items = trabajadoresActivos,
                             key = { _, trabajador -> trabajador.idTrabajador }
                         ) { index, trabajador ->
 
@@ -257,6 +261,9 @@ fun AddWorkerScreen(
                                                 usuario = usuario
                                             )
                                         )
+                                    },
+                                    onDelete = {
+                                        viewModel.eliminarTrabajador(trabajador.idTrabajador)
                                     }
                                 )
                             }

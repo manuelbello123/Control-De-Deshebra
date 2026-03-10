@@ -150,7 +150,8 @@ class AddUserRepository(private val client: HttpClient) {
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
                 403 -> DeleteUserResult.Error("No tienes permisos para eliminar usuarios")
-                404 -> DeleteUserResult.Error("Usuario no encontrado")
+                404 -> DeleteUserResult.Error("Usuario no encontrado o ya eliminado")
+                401 -> DeleteUserResult.Error("No autorizado")
                 else -> DeleteUserResult.Error("Error al eliminar: ${e.response.status.description}")
             }
 

@@ -80,7 +80,8 @@ fun AddCatalogoDialog(
                             focusedBorderColor = Color(0xFF001427),
                             focusedLabelColor = Color(0xFF001427)
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
                     )
                 } else {
                     OutlinedTextField(
@@ -92,7 +93,8 @@ fun AddCatalogoDialog(
                             focusedBorderColor = Color(0xFF001427),
                             focusedLabelColor = Color(0xFF001427)
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
                     )
                 }
 
@@ -118,6 +120,7 @@ fun AddCatalogoDialog(
                             }
                         },
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF001427)),
                         enabled = !isCreating && (if (esPrecio) precio.toDoubleOrNull() != null && precio.toDouble() > 0 else nombre.isNotBlank())
                     ) {

@@ -8,7 +8,8 @@ data class TrabajadorDto(
     @SerialName("id_trabajador")   val idTrabajador: Int,
     @SerialName("nombre")          val nombre: String,
     @SerialName("usuario")         val usuario: String,
-    @SerialName("activo")          val activo: Boolean
+    @SerialName("activo")          val activo: Boolean,
+    @SerialName("is_deleted")      val isDeleted: Boolean = false
 )
 @Serializable
 data class CreateWorkerRequest(

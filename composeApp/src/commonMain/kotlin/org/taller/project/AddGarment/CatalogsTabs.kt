@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material3.DropdownMenuItem
@@ -80,13 +81,15 @@ fun CatalogosTab(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .menuAnchor()
+                    .menuAnchor(),
+                shape = RoundedCornerShape(12.dp),
             )
 
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier.background(Color.White)
+                modifier = Modifier.background(Color.White),
+                shape = RoundedCornerShape(12.dp),
             ) {
                 TipoCatalogo.values().forEach { tipo ->
                     DropdownMenuItem(

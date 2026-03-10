@@ -124,26 +124,28 @@ class AddWorkerViewModel(
     }
 
     // ── Eliminar trabajador (soft delete) ──────────────────────────────
-    fun eliminarTrabajador(id: Int) {
+    fun eliminarTrabajador(idTrabajador: Int) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(error = null)
+            _state.value = _state.value.copy(isDeleting = true, error = null)
 
-            when (val result = repository.deleteTrabajador(id)) {
+            when (val result = repository.deleteTrabajador(idTrabajador)) {
                 is DeleteWorkerResult.Success -> {
-                    // Actualizar el trabajador a inactivo en la lista local
-                    val nuevaLista = _state.value.trabajadores.map {
-                        if (it.idTrabajador == id) it.copy(activo = false) else it
+                    // Eliminar el trabajador de la lista local
+                    val nuevaLista = _state.value.trabajadores.filter {
+                        it.idTrabajador != idTrabajador
                     }
 
                     _state.value = _state.value.copy(
+                        isDeleting = false,
                         trabajadores = nuevaLista,
-                        successMessage = "Trabajador eliminado exitosamente",
+                        successMessage = "Trabajador eliminado correctamente",
                         error = null
                     )
                 }
 
                 is DeleteWorkerResult.Error -> {
                     _state.value = _state.value.copy(
+                        isDeleting = false,
                         error = result.message
                     )
                 }

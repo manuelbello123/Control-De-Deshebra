@@ -32,7 +32,7 @@ import androidx.compose.ui.window.Dialog
 fun DeleteUserDialog(
     username: String,
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -89,7 +89,7 @@ fun DeleteUserDialog(
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Color(0xFF001427)
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         Text("Cancelar")
                     }
@@ -100,7 +100,7 @@ fun DeleteUserDialog(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFFD32F2F)
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         Text("Eliminar")
                     }

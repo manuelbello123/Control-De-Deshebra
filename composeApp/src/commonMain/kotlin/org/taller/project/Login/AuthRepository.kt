@@ -19,8 +19,6 @@ import org.taller.project.Models.LoginResponse
 import org.taller.project.Network.NetworkUtils
 
 class AuthRepository : AuthRepo {
-
-    // Cliente sin Bearer — /auth/login es ruta pública
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(

@@ -115,30 +115,32 @@ class AddUserViewModel(
     // ── Eliminar usuario (soft delete) ─────────────────────────────────
     fun eliminarUsuario(id: Int) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(error = null)
+            _state.value = _state.value.copy(isDeleting = true, error = null)
 
             when (val result = repository.deleteUsuario(id)) {
                 is DeleteUserResult.Success -> {
-                    // Actualizar el usuario a inactivo en la lista local
-                    val nuevaLista = _state.value.usuarios.map {
-                        if (it.idUsuario == id) it.copy(activo = false) else it
+                    val nuevaLista = _state.value.usuarios.filter {
+                        it.idUsuario != id
                     }
 
                     _state.value = _state.value.copy(
+                        isDeleting = false,
                         usuarios = nuevaLista,
-                        successMessage = "Usuario eliminado exitosamente",
+                        successMessage = "Usuario eliminado correctamente",
                         error = null
                     )
                 }
 
                 is DeleteUserResult.Error -> {
                     _state.value = _state.value.copy(
+                        isDeleting = false,
                         error = result.message
                     )
                 }
             }
         }
     }
+
 
     // ── Limpiar mensajes ───────────────────────────────────────────────
     fun clearError() {

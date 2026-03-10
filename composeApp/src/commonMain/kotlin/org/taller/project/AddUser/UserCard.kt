@@ -47,7 +47,8 @@ import org.taller.project.Models.UsuarioDto
 fun UserCard(
     usuario: UsuarioDto,
     onToggleActivo: () -> Unit,
-    onEdit: (username: String, rol: String) -> Unit
+    onEdit: (username: String, rol: String) -> Unit,
+    onDelete: () -> Unit
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -227,7 +228,7 @@ fun UserCard(
             username = usuario.username,
             onConfirm = {
                 showDeleteDialog = false
-                onToggleActivo()
+                onDelete()
             },
             onDismiss = {
                 showDeleteDialog = false

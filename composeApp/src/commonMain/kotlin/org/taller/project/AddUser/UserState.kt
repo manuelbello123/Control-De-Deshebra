@@ -8,5 +8,6 @@ data class UserState(
     val error: String? = null,
     val successMessage: String? = null,
     val isCreating: Boolean = false,
-    val isUpdating: Boolean = false
+    val isUpdating: Boolean = false,
+    val isDeleting: Boolean = false
 )

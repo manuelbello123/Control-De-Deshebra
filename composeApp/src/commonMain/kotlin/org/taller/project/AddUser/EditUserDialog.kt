@@ -101,7 +101,8 @@ fun EditUserDialog(
                         focusedLabelColor = Color(0xFF001427),
                         cursorColor = Color(0xFF001427)
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
                 )
 
                 // ── Dropdown: Rol ─────────────────────────────────────
@@ -131,13 +132,15 @@ fun EditUserDialog(
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .menuAnchor()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp),
                     )
 
                     ExposedDropdownMenu(
                         expanded = expandedRol,
                         onDismissRequest = { expandedRol = false },
-                        modifier = Modifier.background(Color.White)
+                        modifier = Modifier.background(Color.White),
+                        shape = RoundedCornerShape(12.dp),
                     ) {
                         roles.forEach { rol ->
                             DropdownMenuItem(
@@ -159,6 +162,7 @@ fun EditUserDialog(
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Color(0xFF001427)
                         ),
@@ -177,6 +181,7 @@ fun EditUserDialog(
                             }
                         },
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF001427)
                         ),

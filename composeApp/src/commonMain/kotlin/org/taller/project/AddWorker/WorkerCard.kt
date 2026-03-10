@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.taller.project.AddUser.DeleteUserDialog
 import org.taller.project.AddUser.EditUserDialog
@@ -47,7 +48,8 @@ import org.taller.project.Models.TrabajadorDto
 fun WorkerCard(
     trabajador: TrabajadorDto,
     onToggleActivo: () -> Unit,
-    onEdit: (nombre: String, usuario: String) -> Unit
+    onEdit: (nombre: String, usuario: String) -> Unit,
+    onDelete: () -> Unit
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -187,33 +189,46 @@ fun WorkerCard(
                         }
                     }
                 }
-
-                // ── Switch de activo ──────────────────────────────────
-                Switch(
-                    checked = trabajador.activo,
-                    onCheckedChange = { onToggleActivo() },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = Color(0xFF001427),
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = Color(0xFF757575)
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    // ── Switch de activo ──────────────────────────────────
+                    Switch(
+                        checked = trabajador.activo,
+                        onCheckedChange = { onToggleActivo() },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Color(0xFF001427),
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = Color(0xFF757575)
+                        )
                     )
-                )
+                    Text(
+                        text = if (trabajador.activo) "Activo" else "Inactivo",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (trabajador.activo) {
+                            Color(0xFF001427)
+                        } else {
+                            Color(0xFF001427).copy(alpha = 0.5f)
+                        }
+                    )
+                }
             }
         }
     }
 
-    // Dialog de desactivación
+    // Dialog de eliminación
     if (showDeleteDialog) {
         DeleteWorkerDialog(
             nombre = trabajador.nombre,
             onConfirm = {
                 showDeleteDialog = false
-                onToggleActivo()
+                onDelete()
             },
             onDismiss = {
                 showDeleteDialog = false
-                kotlinx.coroutines.MainScope().launch {
+                MainScope().launch {
                     dismissState.reset()
                 }
             }
@@ -226,7 +241,7 @@ fun WorkerCard(
             isUpdating = false, // Puedes conectar esto al state del ViewModel si quieres
             onDismiss = {
                 showEditDialog = false
-                kotlinx.coroutines.MainScope().launch {
+                MainScope().launch {
                     dismissState.reset()
                 }
             },

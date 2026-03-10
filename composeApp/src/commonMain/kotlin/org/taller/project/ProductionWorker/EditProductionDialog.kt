@@ -154,13 +154,15 @@ fun EditProductionDialog(
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .menuAnchor()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp),
                     )
 
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
-                        modifier = Modifier.background(Color.White)
+                        modifier = Modifier.background(Color.White),
+                        shape = RoundedCornerShape(12.dp),
                     ) {
                         prendasDisponibles.forEach { prenda ->
                             DropdownMenuItem(
@@ -201,7 +203,8 @@ fun EditProductionDialog(
                         focusedLabelColor = Color(0xFF001427),
                         cursorColor = Color(0xFF001427)
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
                 )
 
                 // Botones
@@ -212,6 +215,7 @@ fun EditProductionDialog(
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Color(0xFF001427)
                         ),
@@ -231,6 +235,7 @@ fun EditProductionDialog(
                             }
                         },
                         modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF001427)
                         ),

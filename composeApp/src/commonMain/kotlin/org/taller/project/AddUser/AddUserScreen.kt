@@ -132,6 +132,10 @@ fun AddUserScreen(
         }
     ) { paddingValues ->
 
+        val usuariosActivos = remember(state.usuarios) {
+        state.usuarios.filter { !it.isDeleted }
+    }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -213,7 +217,7 @@ fun AddUserScreen(
                         }
 
                         itemsIndexed(
-                            items = state.usuarios,
+                            items = usuariosActivos,
                             key = { _, usuario -> usuario.idUsuario }
                         ) { index, usuario ->
 
@@ -256,6 +260,9 @@ fun AddUserScreen(
                                                 rol = rol
                                             )
                                         )
+                                    },
+                                    onDelete = {
+                                        viewModel.eliminarUsuario(usuario.idUsuario)
                                     }
                                 )
 

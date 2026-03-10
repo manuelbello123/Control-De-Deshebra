@@ -55,7 +55,7 @@ fun DeletePrendaDialog(
                 }
 
                 Text("¿Eliminar prenda?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color(0xFF001427), textAlign = TextAlign.Center)
-                Text("Se eliminará: ${prenda.pieza} ${prenda.color} ${prenda.talla}", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF001427).copy(alpha = 0.7f), textAlign = TextAlign.Center)
+                Text("Se eliminará: ${prenda.pieza} ${prenda.color} ${prenda.talla} ${prenda.tipo} ${prenda.modelo}", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF001427).copy(alpha = 0.7f), textAlign = TextAlign.Center)
 
                 Row(
                     Modifier.fillMaxWidth(),
@@ -65,7 +65,7 @@ fun DeletePrendaDialog(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF001427)),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         Text("Cancelar")
                     }
@@ -74,7 +74,7 @@ fun DeletePrendaDialog(
                         onClick = onConfirm,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         Text("Eliminar")
                     }

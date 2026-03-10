@@ -9,6 +9,7 @@ data class UsuarioDto(
     @SerialName("username")      val username: String,
     @SerialName("rol")           val rol: String,
     @SerialName("activo")        val activo: Boolean,
+    @SerialName("is_deleted")    val isDeleted: Boolean = false,
     @SerialName("id_trabajador") val idTrabajador: Int? = null
 )
 
@@ -16,7 +17,7 @@ data class UsuarioDto(
 data class CreateUserRequest(
     val username: String,
     val password: String,
-    val rol: String  // "ADMIN" o "CAPTURISTA"
+    val rol: String
 )
 
 @Serializable

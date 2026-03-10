@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Refresh
@@ -127,14 +128,14 @@ fun ProductionWorkerScreen(
                             onClick = { navController.popBackStack() }
                         ) {
                             Icon(
-                                imageVector = Icons.Outlined.ChevronLeft,
+                                imageVector = Icons.Outlined.ArrowBackIosNew,
                                 contentDescription = "Regresar",
                                 tint = Color.White,
-                                modifier = Modifier.size(50.dp)
+                                modifier = Modifier.size(25.dp)
                             )
                         }
 
-                    Spacer(modifier = Modifier.size(15.dp))
+                    //Spacer(modifier = Modifier.size(10.dp))
                         Column {
 
                             Text(

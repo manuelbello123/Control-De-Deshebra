@@ -129,16 +129,14 @@ class AddWorkerRepository(private val client: HttpClient) {
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
                 403 -> DeleteWorkerResult.Error("No tienes permisos para eliminar trabajadores")
-                404 -> DeleteWorkerResult.Error("Trabajador no encontrado")
+                404 -> DeleteWorkerResult.Error("Trabajador no encontrado o ya eliminado")
+                401 -> DeleteWorkerResult.Error("No autorizado")
                 else -> DeleteWorkerResult.Error("Error al eliminar: ${e.response.status.description}")
             }
-
         } catch (e: ServerResponseException) {
             DeleteWorkerResult.Error("Error del servidor. Intenta más tarde.")
-
         } catch (e: IOException) {
             DeleteWorkerResult.Error("Sin conexión a internet. Verifica tu red.")
-
         } catch (e: Exception) {
             DeleteWorkerResult.Error("Error inesperado: ${e.message}")
         }

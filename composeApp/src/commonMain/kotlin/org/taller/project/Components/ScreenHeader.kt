@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowBackIosNew
+import androidx.compose.material.icons.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material3.Icon
@@ -49,14 +51,14 @@ fun ScreenHeader(
                 onClick = { navController.popBackStack() }
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.ChevronLeft,
+                    imageVector = Icons.Outlined.ArrowBackIosNew,
                     contentDescription = "Regresar",
                     tint = Color.White,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(25.dp)
                 )
             }
         }
-        Spacer(modifier = Modifier.size(15.dp))
+        //Spacer(modifier = Modifier.size(10.dp))
 
         Column {
             Text(

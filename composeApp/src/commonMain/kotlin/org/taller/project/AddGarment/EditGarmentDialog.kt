@@ -102,6 +102,7 @@ fun EditGarmentDialog(
                         OutlinedButton(
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 contentColor = Color(0xFF001427)
                             ),
@@ -127,6 +128,7 @@ fun EditGarmentDialog(
                                 }
                             },
                             modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF001427)
                             ),

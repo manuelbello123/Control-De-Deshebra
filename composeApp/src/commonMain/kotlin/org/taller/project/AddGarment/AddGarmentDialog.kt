@@ -87,6 +87,7 @@ fun AddPrendaDialog(
                         OutlinedButton(
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF001427)),
                             enabled = !isCreating
                         ) {
@@ -110,6 +111,7 @@ fun AddPrendaDialog(
                                 }
                             },
                             modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF001427)),
                             enabled = !isCreating && selectedPieza != null && selectedColor != null &&
                                     selectedTalla != null && selectedTipo != null && selectedModelo != null && selectedPrecio != null
