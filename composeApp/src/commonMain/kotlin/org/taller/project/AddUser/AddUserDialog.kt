@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AdminPanelSettings
 import androidx.compose.material.icons.outlined.Badge
@@ -42,6 +43,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -52,12 +55,13 @@ import androidx.compose.ui.window.Dialog
 fun AddUserDialog(
     isCreating: Boolean,
     onDismiss: () -> Unit,
-    onConfirm: (username: String, password: String, rol: String) -> Unit
+    onConfirm: (nombre: String ,username: String, password: String, rol: String) -> Unit
 ) {
+    var nombre by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var selectedRol by remember { mutableStateOf("") }  // ⬅️ Vacío por defecto
+    var selectedRol by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -88,6 +92,31 @@ fun AddUserDialog(
                     )
                 }
 
+                // Campo: Nombre
+                OutlinedTextField(
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    label = { Text("Nombre completo") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = null,
+                            tint = Color(0xFF001427)
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF001427),
+                        focusedLabelColor = Color(0xFF001427),
+                        cursorColor = Color(0xFF001427)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                )
+
                 // Campo: Username
                 OutlinedTextField(
                     value = username,
@@ -101,6 +130,9 @@ fun AddUserDialog(
                         )
                     },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF001427),
                         focusedLabelColor = Color(0xFF001427),
@@ -114,7 +146,7 @@ fun AddUserDialog(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Contraseña") },
+                    label = { Text("Pin") },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Lock,
@@ -122,6 +154,10 @@ fun AddUserDialog(
                             tint = Color(0xFF001427)
                         )
                     },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(
@@ -240,7 +276,7 @@ fun AddUserDialog(
 
                     // Crear
                     Button(
-                        onClick = { onConfirm(username, password, selectedRol) },
+                        onClick = { onConfirm( nombre,username, password, selectedRol) },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -248,9 +284,10 @@ fun AddUserDialog(
                             contentColor = Color.White
                         ),
                         enabled = !isCreating &&
+                                nombre.isNotBlank() &&
                                 username.isNotBlank() &&
                                 password.isNotBlank() &&
-                                selectedRol.isNotBlank()  // ⬅️ Validar que rol esté seleccionado
+                                selectedRol.isNotBlank()
                     ) {
                         if (isCreating) {
                             CircularProgressIndicator(

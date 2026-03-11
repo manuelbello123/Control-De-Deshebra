@@ -45,7 +45,7 @@ class AddWorkerRepository(private val client: HttpClient) {
         return try {
 
             if (nombre.isBlank() || usuario.isBlank()) {
-                return WorkerResult.Error("Nombre y usuario son obligatorios")
+                return WorkerResult.Error("Nombre y apellidos son obligatorios")
             }
 
             val trabajador: TrabajadorDto = client.post("$baseUrl/trabajadores") {
@@ -57,8 +57,7 @@ class AddWorkerRepository(private val client: HttpClient) {
 
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
-                409 -> WorkerResult.Error("El usuario ya existe")
-                400 -> WorkerResult.Error("Datos inválidos. Verifica el nombre y usuario.")
+                400 -> WorkerResult.Error("Datos inválidos. Verifica el nombre y los apellidos.")
                 else -> WorkerResult.Error("Error al crear trabajador: ${e.response.status.description}")
             }
 
@@ -83,7 +82,7 @@ class AddWorkerRepository(private val client: HttpClient) {
         return try {
 
             if (nombre.isBlank() || usuario.isBlank()) {
-                return UpdateWorkerResult.Error("Nombre y usuario son obligatorios")
+                return UpdateWorkerResult.Error("Nombre y apellidos son obligatorios")
             }
 
             client.put("$baseUrl/trabajadores/$id") {

@@ -76,7 +76,8 @@ fun ProductionWorkerScreen(
     navController: NavController,
     viewModel: ProductionWorkerViewModel,
     idTrabajador: Int,
-    nombre: String
+    nombre: String,
+    usuario: String
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -139,7 +140,7 @@ fun ProductionWorkerScreen(
                         Column {
 
                             Text(
-                                text = nombre,
+                                text = "$nombre $usuario",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White

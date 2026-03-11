@@ -62,6 +62,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.taller.project.Components.AppModule
+import org.taller.project.Login.UserRole
 import org.taller.project.Models.ProduccionTrabajadorDetalle
 import org.taller.project.Models.TrabajadorConProduccion
 import org.taller.project.Models.TrabajadorDto
@@ -75,6 +77,9 @@ fun HomeWorkerScreen(
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var expanded by remember { mutableStateOf(false) }
+
+    val sessionState by AppModule.sessionManager.sessionState.collectAsState()
+    val isAdmin = sessionState.user?.rol == UserRole.ADMIN
 
     // Cargar trabajadores al iniciar
     LaunchedEffect(Unit) {
@@ -121,62 +126,64 @@ fun HomeWorkerScreen(
             }
         },
         floatingActionButton = {
-            Column(
-                modifier = Modifier
-                    .padding(bottom = 100.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.End
-            ) {
+            if (isAdmin) {
+                Column(
+                    modifier = Modifier
+                        .padding(bottom = 100.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
 
-                AnimatedVisibility(visible = expanded) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalAlignment = Alignment.End
-                    ) {
-
-                        SmallActionButton(
-                            text = "Trabajadores",
-                            icon = Icons.Outlined.Person,
-                            primaryColor = Color(0xFF001427)
+                    AnimatedVisibility(visible = expanded) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalAlignment = Alignment.End
                         ) {
-                            expanded = false
-                            navController.navigate(Routes.ADD_WORKER)
-                        }
 
-                        SmallActionButton(
-                            text = "Usuarios",
-                            icon = Icons.Outlined.Badge,
-                            primaryColor = Color(0xFF001427)
-                        ) {
-                            expanded = false
-                            navController.navigate(Routes.ADD_USER)
-                        }
+                            SmallActionButton(
+                                text = "Trabajadores",
+                                icon = Icons.Outlined.Person,
+                                primaryColor = Color(0xFF001427)
+                            ) {
+                                expanded = false
+                                navController.navigate(Routes.ADD_WORKER)
+                            }
 
-                        SmallActionButton(
-                            text = "Prendas",
-                            icon = Icons.Outlined.Checkroom,
-                            primaryColor = Color(0xFF001427)
-                        ) {
-                            expanded = false
-                            navController.navigate(Routes.ADD_GARMENT)
+                            SmallActionButton(
+                                text = "Usuarios",
+                                icon = Icons.Outlined.Badge,
+                                primaryColor = Color(0xFF001427)
+                            ) {
+                                expanded = false
+                                navController.navigate(Routes.ADD_USER)
+                            }
+
+                            SmallActionButton(
+                                text = "Prendas",
+                                icon = Icons.Outlined.Checkroom,
+                                primaryColor = Color(0xFF001427)
+                            ) {
+                                expanded = false
+                                navController.navigate(Routes.ADD_GARMENT)
+                            }
                         }
                     }
-                }
 
-                FloatingActionButton(
-                    onClick = { expanded = !expanded },
-                    containerColor = Color(0xFF001427),
-                    shape = RoundedCornerShape(18.dp),
-                    elevation = FloatingActionButtonDefaults.elevation(6.dp)
-                ) {
-                    Icon(
-                        imageVector = if (expanded)
-                            Icons.Outlined.Close
-                        else
-                            Icons.Outlined.Add,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
+                    FloatingActionButton(
+                        onClick = { expanded = !expanded },
+                        containerColor = Color(0xFF001427),
+                        shape = RoundedCornerShape(18.dp),
+                        elevation = FloatingActionButtonDefaults.elevation(6.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (expanded)
+                                Icons.Outlined.Close
+                            else
+                                Icons.Outlined.Add,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }
@@ -300,7 +307,8 @@ fun HomeWorkerScreen(
                                         navController.navigate(
                                             ProduccionTrabajadorDetalle(
                                                 trabajador.idTrabajador,
-                                                trabajador.nombre
+                                                trabajador.nombre,
+                                                trabajador.usuario
                                             )
                                         )
                                     }

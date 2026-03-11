@@ -226,14 +226,14 @@ class ProductionWorkerRepository(private val client: HttpClient) {
     // ── DELETE: Eliminar producción ────────────────────────────────────
     suspend fun deleteProduccion(idProduccion: Int): DeleteProduccionResult {
         return try {
-
             client.delete("$baseUrl/produccion/$idProduccion")
-
             DeleteProduccionResult.Success
 
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
-                403 -> DeleteProduccionResult.Error("No tienes permisos para eliminar esta producción")
+                403 -> DeleteProduccionResult.Error(
+                    "Solo puedes eliminar producciones que tú registraste"
+                )
                 404 -> DeleteProduccionResult.Error("Producción no encontrada")
                 401 -> DeleteProduccionResult.Error("No autorizado. Inicia sesión nuevamente.")
                 else -> DeleteProduccionResult.Error("Error al eliminar: ${e.response.status.description}")

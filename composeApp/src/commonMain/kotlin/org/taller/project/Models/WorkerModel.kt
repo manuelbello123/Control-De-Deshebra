@@ -14,11 +14,11 @@ data class TrabajadorDto(
 @Serializable
 data class CreateWorkerRequest(
     val nombre: String,
-    val usuario: String
+    val usuario: String? = null
 )
 @Serializable
 data class UpdateTrabajadorRequest(
     val nombre: String,
-    val usuario: String,
+    val usuario: String? = null,
     val activo: Boolean
 )

@@ -210,7 +210,7 @@ fun AddUserScreen(
                     ) {
                         item {
                             Text(
-                                text = "${state.usuarios.size} usuarios",
+                                text = "${usuariosActivos.size} usuarios",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Color(0xFF001427).copy(alpha = 0.7f)
                             )
@@ -253,9 +253,10 @@ fun AddUserScreen(
                                 UserCard(
                                     usuario = usuario,
                                     onToggleActivo = { viewModel.toggleActivo(usuario) },
-                                    onEdit = { username, rol ->
+                                    onEdit = {nombre ,username, rol ->
                                         viewModel.actualizarUsuario(
                                             usuario.copy(
+                                                nombre = nombre,
                                                 username = username,
                                                 rol = rol
                                             )
@@ -279,8 +280,8 @@ fun AddUserScreen(
             AddUserDialog(
                 isCreating = state.isCreating,
                 onDismiss = { showDialog = false },
-                onConfirm = { username, password, rol ->
-                    viewModel.crearUsuario(username, password, rol)
+                onConfirm = {nombbre ,username, password, rol ->
+                    viewModel.crearUsuario(nombbre ,username, password, rol)
                     showDialog = false
                 }
             )

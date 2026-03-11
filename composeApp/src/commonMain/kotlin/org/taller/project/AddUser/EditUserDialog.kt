@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.AdminPanelSettings
@@ -40,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import org.taller.project.Models.TrabajadorDto
@@ -51,8 +53,9 @@ fun EditUserDialog(
     usuario: UsuarioDto,
     isUpdating: Boolean,
     onDismiss: () -> Unit,
-    onConfirm: (username: String, rol: String) -> Unit
+    onConfirm: (nombre: String ,username: String, rol: String) -> Unit
 ) {
+    var nombre by remember { mutableStateOf(usuario.nombre) }
     var username by remember { mutableStateOf(usuario.username) }
     var selectedRol by remember { mutableStateOf(usuario.rol) }
     var expandedRol by remember { mutableStateOf(false) }
@@ -83,11 +86,11 @@ fun EditUserDialog(
                     )
                 }
 
-                // ── Campo: Username ───────────────────────────────────
+                // ── Campo: Nombre ───────────────────────────────────
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("Usuario") },
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    label = { Text("Nombre completo") },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Person,
@@ -96,6 +99,34 @@ fun EditUserDialog(
                         )
                     },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF001427),
+                        focusedLabelColor = Color(0xFF001427),
+                        cursorColor = Color(0xFF001427)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                )
+
+                // ── Campo: Username ───────────────────────────────────
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text("Nombre de usuario") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Badge,
+                            contentDescription = null,
+                            tint = Color(0xFF001427)
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF001427),
                         focusedLabelColor = Color(0xFF001427),
@@ -175,6 +206,7 @@ fun EditUserDialog(
                         onClick = {
                             if (username.isNotBlank()) {
                                 onConfirm(
+                                    nombre,
                                     username,
                                     selectedRol
                                 )

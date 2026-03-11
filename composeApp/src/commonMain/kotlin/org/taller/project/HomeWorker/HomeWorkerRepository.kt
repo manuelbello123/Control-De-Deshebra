@@ -59,6 +59,7 @@ class HomeWorkerRepository(private val client: HttpClient) {
                 TrabajadorConProduccion(
                     idTrabajador = trabajador.idTrabajador,
                     nombre = trabajador.nombre,
+                    usuario = trabajador.usuario,
                     totalPrendas = sueldoDelDia?.totalPrendas ?: 0,
                     sueldoDiario = sueldoDelDia?.sueldoDiario ?: 0.0,
                     fecha = fechaHoy

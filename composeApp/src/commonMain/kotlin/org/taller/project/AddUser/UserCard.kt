@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.taller.project.Models.UsuarioDto
 
@@ -47,7 +48,7 @@ import org.taller.project.Models.UsuarioDto
 fun UserCard(
     usuario: UsuarioDto,
     onToggleActivo: () -> Unit,
-    onEdit: (username: String, rol: String) -> Unit,
+    onEdit: (nombre: String ,username: String, rol: String) -> Unit,
     onDelete: () -> Unit
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
@@ -170,6 +171,12 @@ fun UserCard(
                             fontWeight = FontWeight.SemiBold,
                             color = Color(0xFF001427)
                         )
+                        Text(
+                            text = usuario.nombre,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFF001427)
+                        )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -232,7 +239,7 @@ fun UserCard(
             },
             onDismiss = {
                 showDeleteDialog = false
-                kotlinx.coroutines.MainScope().launch {
+                MainScope().launch {
                     dismissState.reset()
                 }
             }
@@ -246,13 +253,13 @@ fun UserCard(
             isUpdating = false,  // Puedes conectar esto al state del ViewModel
             onDismiss = {
                 showEditDialog = false
-                kotlinx.coroutines.MainScope().launch {
+                MainScope().launch {
                     dismissState.reset()
                 }
             },
-            onConfirm = { username, rol->
+            onConfirm = {nombre ,username, rol->
                 showEditDialog = false
-                onEdit(username, rol)
+                onEdit(nombre ,username, rol)
             }
         )
     }

@@ -7,9 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import org.taller.project.Components.AppModule
 import org.taller.project.Components.BottomNavigationBar
 import org.taller.project.Components.ScreenHeader
 import org.taller.project.Components.TopBar
+import org.taller.project.Login.UserRole
 import org.taller.project.Navigation.AppNavGraph
 import org.taller.project.Navigation.Routes
 import kotlin.collections.get
@@ -20,11 +22,18 @@ fun App() {
         val navController = rememberNavController()
         val currentBackStackEntry = navController.currentBackStackEntryAsState()
         val currentRoute = currentBackStackEntry.value?.destination?.route
-        val showBottomBar = currentRoute in listOf(
+
+        // ⬇️⬇️⬇️ AGREGAR ESTAS 3 LÍNEAS ⬇️⬇️⬇️
+        val sessionState by AppModule.sessionManager.sessionState.collectAsState()
+        val isAdmin = sessionState.user?.rol == UserRole.ADMIN
+
+        // ⬇️⬇️⬇️ MODIFICAR ESTA LÍNEA - Agregar "isAdmin &&" ⬇️⬇️⬇️
+        val showBottomBar = isAdmin && currentRoute in listOf(
             Routes.HOME_WORKER,
             Routes.HISTORY,
             Routes.TOTAL_WEEKLY,
         )
+
         val showTopBar = Routes.headers.containsKey(currentRoute)
         val headerData = Routes.headers[currentRoute]
 
@@ -45,6 +54,5 @@ fun App() {
         ) {
             AppNavGraph(navController)
         }
-
     }
 }

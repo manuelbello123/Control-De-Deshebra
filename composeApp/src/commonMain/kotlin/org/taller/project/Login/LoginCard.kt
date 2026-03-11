@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
@@ -48,6 +49,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -136,6 +139,9 @@ fun LoginCard(
                             tint = Color(0xFF001427)
                         )
                     },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF001427),
                         unfocusedBorderColor = Color(0xFF001427).copy(alpha = 0.3f),
@@ -149,32 +155,35 @@ fun LoginCard(
                         disabledLeadingIconColor = Color(0xFF001427).copy(alpha = 0.4f),
                         disabledTextColor = Color(0xFF001427).copy(alpha = 0.4f)
                     ),
-                    shape = RoundedCornerShape(12.dp),  // ⬅️ NUEVO: Shape
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ── Campo Contraseña con botón de ojo ─────────────
                 OutlinedTextField(
                     value = password,
-                    onValueChange = onPasswordChange,
-                    label = { Text("Contraseña") },
+                    onValueChange = {
+                        if (it.length <= 4 && it.all { char -> char.isDigit() }) {
+                            onPasswordChange(it)
+                        }
+                    },
+                    label = { Text("Pin") },
                     singleLine = true,
                     enabled = !isLoading,
-                    visualTransformation = if (passwordVisible) {  // ⬅️ MEJORADO
+                    visualTransformation = if (passwordVisible) {
                         VisualTransformation.None
                     } else {
                         PasswordVisualTransformation()
                     },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Outlined.Lock,  // ⬅️ MEJORADO: Lock en lugar de Password
+                            imageVector = Icons.Outlined.Lock,
                             contentDescription = null,
                             tint = Color(0xFF001427)
                         )
                     },
-                    trailingIcon = {  // ⬅️ NUEVO: Botón de ojo
+                    trailingIcon = {
                         IconButton(
                             onClick = { passwordVisible = !passwordVisible },
                             enabled = !isLoading
@@ -196,6 +205,10 @@ fun LoginCard(
                             )
                         }
                     },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF001427),
                         unfocusedBorderColor = Color(0xFF001427).copy(alpha = 0.3f),
@@ -209,7 +222,7 @@ fun LoginCard(
                         disabledLeadingIconColor = Color(0xFF001427).copy(alpha = 0.4f),
                         disabledTextColor = Color(0xFF001427).copy(alpha = 0.4f)
                     ),
-                    shape = RoundedCornerShape(12.dp),  // ⬅️ NUEVO: Shape
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
 

@@ -3,6 +3,7 @@ package org.taller.project.Models
 data class ProductionHistory(
     val idProduccion: Int,
     val nombreTrabajador: String,
+    val usuarioTrabajador: String,
     val pieza: String,
     val color: String,
     val talla: String,

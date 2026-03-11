@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,6 +51,12 @@ fun PrendasTab(
     state: GarmentState,
     viewModel: AddGarmentViewModel
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
+    val prendasMostradas =
+        if (expanded) state.prendas
+        else state.prendas.take(8)
+
     LaunchedEffect(Unit) {
         viewModel.cargarPrendas()
     }
@@ -112,7 +119,8 @@ fun PrendasTab(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 80.dp)
-            ){
+            ) {
+
                 item {
                     Text(
                         text = "${state.prendas.size} prendas",
@@ -122,9 +130,10 @@ fun PrendasTab(
                 }
 
                 itemsIndexed(
-                    items = state.prendas,
+                    items = prendasMostradas,
                     key = { _, prenda -> prenda.idPrenda }
                 ) { index, prenda ->
+
                     val offsetX = remember { Animatable(300f) }
                     val alpha = remember { Animatable(0f) }
 
@@ -170,7 +179,23 @@ fun PrendasTab(
                                 )
                             }
                         )
+
                         Spacer(Modifier.height(12.dp))
+                    }
+                }
+
+                if (state.prendas.size > 8) {
+                    item {
+                        TextButton(
+                            onClick = { expanded = !expanded },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = if (expanded) "Ver menos" else "Ver más",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color(0xFF001427).copy(alpha = 0.7f)
+                            )
+                        }
                     }
                 }
             }

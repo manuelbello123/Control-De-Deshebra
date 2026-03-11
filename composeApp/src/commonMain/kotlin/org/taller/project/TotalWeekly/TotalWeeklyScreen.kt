@@ -41,11 +41,14 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,8 +64,15 @@ fun TotalWeeklyScreen(
     navController: NavController,
     viewModel: TotalWeeklyViewModel
 ) {
+
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    var expanded by remember { mutableStateOf(false) }
+
+    val semanasMostradas =
+        if (expanded) state.totales
+        else state.totales.take(8)
 
     // Cargar totales al iniciar
     LaunchedEffect(Unit) {
@@ -210,7 +220,7 @@ fun TotalWeeklyScreen(
                         }
                         // ── Lista de totales ──────────────────────────────────
                         itemsIndexed(
-                            items = state.totales,
+                            items = semanasMostradas,
                             key = { _, item -> item.semanaIso }
                         ) { index, total ->
 
@@ -244,11 +254,25 @@ fun TotalWeeklyScreen(
                                     .graphicsLayer { this.alpha = alpha.value }
                             ) {
                                 TotalWeeklyCard(total = total)
+
                                 Spacer(modifier = Modifier.height(12.dp))
                             }
                         }
+                        if (state.totales.size > 8) {
+                            item {
+                                TextButton(
+                                    onClick = { expanded = !expanded },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = if (expanded) "Ver menos" else "Ver más",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = Color(0xFF001427).copy(alpha = 0.7f)
+                                    )
+                                }
+                            }
+                        }
                     }
-
                 }
             }
         }

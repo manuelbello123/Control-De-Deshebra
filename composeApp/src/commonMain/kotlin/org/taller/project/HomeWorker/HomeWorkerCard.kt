@@ -78,7 +78,7 @@ fun HomeWorkerCard(
 
                 // Nombre
                 Text(
-                    text = trabajador.nombre,
+                    text = "${trabajador.nombre} ${trabajador.usuario}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF001427)
@@ -98,7 +98,8 @@ fun HomeWorkerCard(
                     ProductionDailyMetric(
                         icon = Icons.Outlined.Checkroom,
                         value = "${trabajador.totalPrendas} pzs",
-                        label = ""
+                        label = "",
+                        highlighted = trabajador.totalPrendas > 0
                     )
 
                     // Sueldo diario

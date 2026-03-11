@@ -81,6 +81,7 @@ class HistoryRepository(private val client: HttpClient) {
                     ProductionHistory(
                         idProduccion     = prod.idProduccion,
                         nombreTrabajador = trabajador.nombre,
+                        usuarioTrabajador= trabajador.usuario,
                         pieza            = prenda.pieza,
                         color            = prenda.color,
                         talla            = prenda.talla,

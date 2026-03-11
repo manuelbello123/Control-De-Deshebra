@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.PersonAddAlt
+import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.material.icons.outlined.PersonPin
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -30,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import org.taller.project.Models.TrabajadorDto
@@ -73,7 +78,7 @@ fun WorkerEditDialog(
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
-                    label = { Text("Nombre") },
+                    label = { Text("Nombre (s)") },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Person,
@@ -82,6 +87,9 @@ fun WorkerEditDialog(
                         )
                     },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF001427),
                         focusedLabelColor = Color(0xFF001427),
@@ -95,15 +103,18 @@ fun WorkerEditDialog(
                 OutlinedTextField(
                     value = usuario,
                     onValueChange = { usuario = it },
-                    label = { Text("Usuario") },
+                    label = { Text("Apellidos") },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Outlined.AlternateEmail,
+                            imageVector = Icons.Outlined.Person,
                             contentDescription = null,
                             tint = Color(0xFF001427)
                         )
                     },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF001427),
                         focusedLabelColor = Color(0xFF001427),

@@ -15,7 +15,7 @@ data class ProduccionDto(
     @SerialName("capturado_por")   val capturadoPor: Int
 )
 @Serializable
-data class ProduccionTrabajadorDetalle(val id: Int, val nombre: String)
+data class ProduccionTrabajadorDetalle(val id: Int, val nombre: String, val usuario: String)
 @Serializable
 data class ProduccionDetalleDto(
     @SerialName("id_produccion")   val idProduccion: Int,

@@ -162,7 +162,7 @@ fun WorkerCard(
                     }
                     Column {
                         Text(
-                            text = trabajador.nombre,
+                            text = "${trabajador.nombre} ${trabajador.usuario}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = if (trabajador.activo) {
@@ -171,22 +171,6 @@ fun WorkerCard(
                                 Color(0xFF757575)
                             }
                         )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.AlternateEmail,
-                                contentDescription = null,
-                                modifier = Modifier.size(14.dp),
-                                tint = Color(0xFF001427).copy(alpha = 0.6f)
-                            )
-                            Text(
-                                text = trabajador.usuario,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color(0xFF001427).copy(alpha = 0.6f)
-                            )
-                        }
                     }
                 }
                 Column(
@@ -222,6 +206,7 @@ fun WorkerCard(
     if (showDeleteDialog) {
         DeleteWorkerDialog(
             nombre = trabajador.nombre,
+            usuario = trabajador.usuario,
             onConfirm = {
                 showDeleteDialog = false
                 onDelete()

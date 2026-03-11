@@ -15,6 +15,7 @@ data class SueldoDiarioDto(
 data class TrabajadorConProduccion(
     val idTrabajador: Int,
     val nombre: String,
+    val usuario: String,
     val totalPrendas: Int,
     val sueldoDiario: Double,
     val fecha: String

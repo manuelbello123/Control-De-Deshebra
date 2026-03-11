@@ -42,13 +42,14 @@ class AddUserRepository(private val client: HttpClient) {
 
     // ── POST: Crear nuevo usuario ──────────────────────────────────────
     suspend fun createUsuario(
+        nombre: String,
         username: String,
         password: String,
         rol: String
     ): UserResult {
         return try {
 
-            if (username.isBlank() || password.isBlank() || rol.isBlank()) {
+            if (nombre.isBlank() || username.isBlank() || password.isBlank() || rol.isBlank()) {
                 return UserResult.Error("Todos los campos son obligatorios")
             }
 
@@ -60,6 +61,7 @@ class AddUserRepository(private val client: HttpClient) {
                 contentType(ContentType.Application.Json)
                 setBody(
                     CreateUserRequest(
+                        nombre = nombre,
                         username = username,
                         password = password,
                         rol = rol
@@ -91,6 +93,7 @@ class AddUserRepository(private val client: HttpClient) {
     // ── PUT: Actualizar usuario ────────────────────────────────────────
     suspend fun updateUsuario(
         id: Int,
+        nombre: String,
         username: String,
         rol: String,
         activo: Boolean,
@@ -98,8 +101,8 @@ class AddUserRepository(private val client: HttpClient) {
     ): UpdateUserResult {
         return try {
 
-            if (username.isBlank() || rol.isBlank()) {
-                return UpdateUserResult.Error("Username y rol son obligatorios")
+            if (nombre.isBlank() || username.isBlank() || rol.isBlank()) {
+                return UpdateUserResult.Error("Nombre, usuario y rol son obligatorios")
             }
 
             if (rol != "ADMIN" && rol != "CAPTURISTA") {
@@ -110,6 +113,7 @@ class AddUserRepository(private val client: HttpClient) {
                 contentType(ContentType.Application.Json)
                 setBody(
                     UpdateUsuarioRequest(
+                        nombre = nombre,
                         username = username,
                         rol = rol,
                         activo = activo,

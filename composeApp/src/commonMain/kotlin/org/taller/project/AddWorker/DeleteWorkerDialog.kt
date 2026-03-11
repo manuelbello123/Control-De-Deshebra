@@ -31,6 +31,7 @@ import androidx.compose.ui.window.Dialog
 @Composable
 fun DeleteWorkerDialog(
     nombre: String,
+    usuario: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -73,7 +74,7 @@ fun DeleteWorkerDialog(
                 )
 
                 Text(
-                    text = "Esto eliminará a \"$nombre\" permanentemente. ¿Estás seguro?",
+                    text = "Esto eliminará a $nombre $usuario permanentemente. ¿Estás seguro?" ,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF001427).copy(alpha = 0.7f),
                     textAlign = TextAlign.Center

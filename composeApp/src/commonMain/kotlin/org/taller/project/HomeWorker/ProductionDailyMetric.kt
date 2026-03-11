@@ -38,7 +38,7 @@ fun ProductionDailyMetric(
                 tint = if (highlighted) {
                     Color(0xFF001427)
                 } else {
-                    Color(0xFF001427).copy(alpha = 0.6f)
+                    Color(0xFF001427).copy(alpha = 0.5f)
                 }
             )
             Text(

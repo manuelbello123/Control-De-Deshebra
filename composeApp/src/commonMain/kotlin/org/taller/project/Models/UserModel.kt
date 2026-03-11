@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UsuarioDto(
     @SerialName("id_usuario")    val idUsuario: Int,
+    @SerialName("nombre")        val nombre: String,
     @SerialName("username")      val username: String,
     @SerialName("rol")           val rol: String,
     @SerialName("activo")        val activo: Boolean,
@@ -15,6 +16,7 @@ data class UsuarioDto(
 
 @Serializable
 data class CreateUserRequest(
+    val nombre: String,
     val username: String,
     val password: String,
     val rol: String
@@ -22,6 +24,7 @@ data class CreateUserRequest(
 
 @Serializable
 data class UpdateUsuarioRequest(
+    val nombre: String,
     val username: String,
     val rol: String,
     val activo: Boolean,

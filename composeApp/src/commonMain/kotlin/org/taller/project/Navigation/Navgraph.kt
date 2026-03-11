@@ -18,6 +18,7 @@ import org.taller.project.AddUser.AddUserViewModel
 import org.taller.project.AddWorker.AddWorkerRepository
 import org.taller.project.AddWorker.AddWorkerScreen
 import org.taller.project.AddWorker.AddWorkerViewModel
+import org.taller.project.Components.AppModule
 import org.taller.project.History.HistoryRepository
 import org.taller.project.History.HistoryScreen
 import org.taller.project.History.HistoryViewModel
@@ -26,7 +27,6 @@ import org.taller.project.HomeWorker.HomeWorkerScreen
 import org.taller.project.HomeWorker.HomeWorkerViewModel
 import org.taller.project.Login.AuthRepository
 import org.taller.project.Login.AuthViewModel
-import org.taller.project.Login.InMemorySessionManager
 import org.taller.project.Login.LoginScreen
 import org.taller.project.Models.ProduccionTrabajadorDetalle
 import org.taller.project.Network.NetworkUtils
@@ -40,16 +40,15 @@ import org.taller.project.TotalWeekly.TotalWeeklyViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
+    val sessionManager = AppModule.sessionManager
 
-    // ── Session Manager (única instancia compartida) ──────────────────
-    val sessionManager = remember { InMemorySessionManager() }
     val sessionState by sessionManager.sessionState.collectAsState()
 
     // ── ViewModels ────────────────────────────────────────────────────
     val authViewModel = remember {
         AuthViewModel(
             authRepository = AuthRepository(),
-            sessionManager = sessionManager
+            sessionManager = sessionManager  // ⬅️ Ahora usa el mismo que App()
         )
     }
 
@@ -60,6 +59,7 @@ fun AppNavGraph(navController: NavHostController) {
             )
         )
     }
+
     val productionWorkerViewModel = remember {
         ProductionWorkerViewModel(
             repository = ProductionWorkerRepository(
@@ -83,6 +83,7 @@ fun AppNavGraph(navController: NavHostController) {
             )
         )
     }
+
     val addUserViewModel = remember {
         AddUserViewModel(
             repository = AddUserRepository(
@@ -90,6 +91,7 @@ fun AppNavGraph(navController: NavHostController) {
             )
         )
     }
+
     val addGarmentViewModel = remember {
         AddGarmentViewModel(
             repository = AddGarmentRepository(
@@ -97,6 +99,7 @@ fun AppNavGraph(navController: NavHostController) {
             )
         )
     }
+
     val totalWeeklyViewModel = remember {
         TotalWeeklyViewModel(
             repository = TotalWeeklyRepository(
@@ -154,10 +157,9 @@ fun AppNavGraph(navController: NavHostController) {
                 navController = navController,
                 viewModel = productionWorkerViewModel,
                 idTrabajador = args.id,
-                nombre = args.nombre
-
+                nombre = args.nombre,
+                usuario = args.usuario
             )
         }
-
     }
 }

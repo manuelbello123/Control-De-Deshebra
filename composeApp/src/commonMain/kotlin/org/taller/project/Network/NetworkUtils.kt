@@ -8,13 +8,13 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.taller.project.Login.InMemorySessionManager
+import org.taller.project.Login.SessionManager
 
 
 object NetworkUtils {
 
     // El cliente ahora necesita el SessionManager para leer el token
-    fun buildHttpClient(sessionManager: InMemorySessionManager): HttpClient {
+    fun buildHttpClient(sessionManager: SessionManager): HttpClient {
         return HttpClient {
 
             install(ContentNegotiation) {

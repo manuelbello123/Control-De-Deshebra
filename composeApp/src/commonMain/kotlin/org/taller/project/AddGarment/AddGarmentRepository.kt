@@ -119,12 +119,17 @@ class AddGarmentRepository(private val client: HttpClient) {
         return try {
             client.delete("$baseUrl/prendas/$idPrenda")
             DeletePrendaResult.Success
+
         } catch (e: ClientRequestException) {
             when (e.response.status.value) {
                 404 -> DeletePrendaResult.Error("Prenda no encontrada")
                 401 -> DeletePrendaResult.Error("No autorizado")
+                409 -> DeletePrendaResult.Error(
+                    "No se puede eliminar. La prenda está registrada en producciones."
+                )
                 else -> DeletePrendaResult.Error("Error: ${e.response.status.description}")
             }
+
         } catch (e: ServerResponseException) {
             DeletePrendaResult.Error("Error del servidor. Intenta más tarde.")
 
@@ -211,6 +216,7 @@ class AddGarmentRepository(private val client: HttpClient) {
             when (e.response.status.value) {
                 403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar")
                 404 -> CrudCatalogoResult.Error("No encontrado")
+                409 -> CrudCatalogoResult.Error("No se puede eliminar. Esta pieza tiene prendas asociadas.")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
@@ -299,6 +305,7 @@ class AddGarmentRepository(private val client: HttpClient) {
             when (e.response.status.value) {
                 403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar")
                 404 -> CrudCatalogoResult.Error("No encontrado")
+                409 -> CrudCatalogoResult.Error("No se puede eliminar. Este color tiene prendas asociadas.")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
@@ -387,6 +394,7 @@ class AddGarmentRepository(private val client: HttpClient) {
             when (e.response.status.value) {
                 403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar")
                 404 -> CrudCatalogoResult.Error("No encontrado")
+                409 -> CrudCatalogoResult.Error("No se puede eliminar. Esta talla tiene prendas asociadas.")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
@@ -475,6 +483,7 @@ class AddGarmentRepository(private val client: HttpClient) {
             when (e.response.status.value) {
                 403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar")
                 404 -> CrudCatalogoResult.Error("No encontrado")
+                409 -> CrudCatalogoResult.Error("No se puede eliminar. Este tipo tiene prendas asociadas.")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
@@ -563,6 +572,7 @@ class AddGarmentRepository(private val client: HttpClient) {
             when (e.response.status.value) {
                 403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar")
                 404 -> CrudCatalogoResult.Error("No encontrado")
+                409 -> CrudCatalogoResult.Error("No se puede eliminar. Este modelo tiene prendas asociadas.")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {
@@ -661,6 +671,7 @@ class AddGarmentRepository(private val client: HttpClient) {
                 403 -> CrudCatalogoResult.Error("Solo ADMIN puede eliminar precios")
                 404 -> CrudCatalogoResult.Error("Precio no encontrado")
                 401 -> CrudCatalogoResult.Error("No autorizado")
+                409 -> CrudCatalogoResult.Error("No se puede eliminar. Este precio tiene prendas asociadas.")
                 else -> CrudCatalogoResult.Error("Error: ${e.response.status.description}")
             }
         } catch (e: ServerResponseException) {

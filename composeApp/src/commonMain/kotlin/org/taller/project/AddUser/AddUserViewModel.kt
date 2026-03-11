@@ -40,7 +40,7 @@ class AddUserViewModel(
     }
 
     // ── Crear nuevo usuario ────────────────────────────────────────────
-    fun crearUsuario(username: String, password: String, rol: String) {
+    fun crearUsuario(nombre: String, username: String, password: String, rol: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 isCreating = true,
@@ -48,7 +48,7 @@ class AddUserViewModel(
                 successMessage = null
             )
 
-            when (val result = repository.createUsuario(username, password, rol)) {
+            when (val result = repository.createUsuario(nombre ,username, password, rol)) {
                 is UserResult.Success -> {
                     val nuevaLista = _state.value.usuarios + result.usuario
 
@@ -77,6 +77,7 @@ class AddUserViewModel(
 
             when (val result = repository.updateUsuario(
                 id = usuario.idUsuario,
+                nombre = usuario.nombre,
                 username = usuario.username,
                 rol = usuario.rol,
                 activo = usuario.activo,

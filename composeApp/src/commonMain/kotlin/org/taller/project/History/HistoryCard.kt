@@ -62,7 +62,7 @@ fun HistoryCard(item: ProductionHistory) {
                         tint = Color(0xFF001427)
                     )
                     Text(
-                        text = item.nombreTrabajador,
+                        text = "${item.nombreTrabajador} ${item.usuarioTrabajador}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = Color(0xFF001427)

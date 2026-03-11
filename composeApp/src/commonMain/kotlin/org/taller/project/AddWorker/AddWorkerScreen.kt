@@ -211,7 +211,7 @@ fun AddWorkerScreen(
                     ) {
                         item {
                             Text(
-                                text = "${state.trabajadores.size} trabajadores",
+                                text = "${trabajadoresActivos.size} trabajadores",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Color(0xFF001427).copy(alpha = 0.7f)
                             )
