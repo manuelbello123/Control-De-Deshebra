@@ -2,7 +2,6 @@ package org.taller.project.History
 
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import org.taller.project.Models.ProductionHistory
 
 fun String.toDayName(): String {
     return try {

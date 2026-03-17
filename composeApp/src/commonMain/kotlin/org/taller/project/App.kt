@@ -23,11 +23,9 @@ fun App() {
         val currentBackStackEntry = navController.currentBackStackEntryAsState()
         val currentRoute = currentBackStackEntry.value?.destination?.route
 
-        // ⬇️⬇️⬇️ AGREGAR ESTAS 3 LÍNEAS ⬇️⬇️⬇️
         val sessionState by AppModule.sessionManager.sessionState.collectAsState()
         val isAdmin = sessionState.user?.rol == UserRole.ADMIN
 
-        // ⬇️⬇️⬇️ MODIFICAR ESTA LÍNEA - Agregar "isAdmin &&" ⬇️⬇️⬇️
         val showBottomBar = isAdmin && currentRoute in listOf(
             Routes.HOME_WORKER,
             Routes.HISTORY,

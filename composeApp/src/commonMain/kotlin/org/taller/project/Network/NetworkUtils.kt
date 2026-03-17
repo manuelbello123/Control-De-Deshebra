@@ -12,8 +12,6 @@ import org.taller.project.Login.SessionManager
 
 
 object NetworkUtils {
-
-    // El cliente ahora necesita el SessionManager para leer el token
     fun buildHttpClient(sessionManager: SessionManager): HttpClient {
         return HttpClient {
 
@@ -26,16 +24,15 @@ object NetworkUtils {
 
             install(Auth) {
                 bearer {
-                    // Ktor llama a loadTokens antes de cada request protegido
                     loadTokens {
                         val token = sessionManager.getToken()
                         if (token != null) {
                             BearerTokens(
                                 accessToken = token,
-                                refreshToken = ""   // no manejas refresh por ahora
+                                refreshToken = ""
                             )
                         } else {
-                            null    // sin token → Ktor no agrega el header
+                            null
                         }
                     }
                 }

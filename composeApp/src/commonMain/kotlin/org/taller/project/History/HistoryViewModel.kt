@@ -2,16 +2,11 @@ package org.taller.project.History
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.client.plugins.ResponseException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.io.IOException
-import org.taller.project.Login.InMemorySessionManager
 import org.taller.project.Models.ProductionByDay
-import org.taller.project.Network.NetworkUtils
 
 
 class HistoryViewModel(

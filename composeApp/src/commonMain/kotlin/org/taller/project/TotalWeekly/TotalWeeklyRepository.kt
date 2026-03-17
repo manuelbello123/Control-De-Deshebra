@@ -10,7 +10,7 @@ import org.taller.project.Models.TotalSemanalDto
 
 class TotalWeeklyRepository(private val client: HttpClient) {
 
-    private val baseUrl = "http://3.131.91.29"
+    private val baseUrl = "http://3.145.5.253"
 
     // ── GET: Obtener todos los totales semanales ───────────────────────
     suspend fun getTotalesSemanales(): TotalWeeklyResult {
@@ -19,15 +19,12 @@ class TotalWeeklyRepository(private val client: HttpClient) {
             TotalWeeklyResult.Success(totales)
 
         } catch (e: ClientRequestException) {
-            // 4xx - error del cliente
             TotalWeeklyResult.Error("Error al obtener totales: ${e.response.status.description}")
 
         } catch (e: ServerResponseException) {
-            // 5xx - error del servidor
             TotalWeeklyResult.Error("Error del servidor. Intenta más tarde.")
 
         } catch (e: IOException) {
-            // Sin conexión
             TotalWeeklyResult.Error("Sin conexión a internet. Verifica tu red.")
 
         } catch (e: Exception) {

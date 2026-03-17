@@ -6,7 +6,6 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.supervisorScope
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -18,7 +17,7 @@ import kotlin.time.Clock
 
 class HomeWorkerRepository(private val client: HttpClient) {
 
-    private val baseUrl = "http://3.131.91.29"
+    private val baseUrl = "http://3.145.5.253"
 
     // ── GET: Obtener trabajadores activos con su producción del día ────
     suspend fun getTrabajadoresConProduccion(): HomeWorkerResult = supervisorScope  {

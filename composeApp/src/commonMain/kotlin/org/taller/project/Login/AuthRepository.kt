@@ -16,7 +16,6 @@ import kotlinx.serialization.json.Json
 import org.taller.project.Models.AuthUser
 import org.taller.project.Models.LoginRequest
 import org.taller.project.Models.LoginResponse
-import org.taller.project.Network.NetworkUtils
 
 class AuthRepository : AuthRepo {
     private val client = HttpClient {
@@ -35,7 +34,7 @@ class AuthRepository : AuthRepo {
         return try {
 
             val response: LoginResponse = client.post(
-                "http://3.131.91.29/auth/login"
+                "http://3.145.5.253/auth/login"
             ) {
                 contentType(ContentType.Application.Json)
                 setBody(

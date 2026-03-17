@@ -48,7 +48,7 @@ fun AppNavGraph(navController: NavHostController) {
     val authViewModel = remember {
         AuthViewModel(
             authRepository = AuthRepository(),
-            sessionManager = sessionManager  // ⬅️ Ahora usa el mismo que App()
+            sessionManager = sessionManager
         )
     }
 

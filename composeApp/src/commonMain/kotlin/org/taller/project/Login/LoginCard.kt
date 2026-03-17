@@ -65,8 +65,7 @@ fun LoginCard(
     onLoginClick: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
-    var passwordVisible by remember { mutableStateOf(false) }  // ⬅️ NUEVO: Estado para visibilidad
-
+    var passwordVisible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         visible = true
     }
@@ -104,21 +103,21 @@ fun LoginCard(
         ) {
 
             Column(
-                modifier = Modifier.padding(32.dp),  // ⬅️ MEJORADO: Más padding
+                modifier = Modifier.padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Text(
                     text = "Bienvenido",
-                    style = MaterialTheme.typography.headlineMedium,  // ⬅️ MEJORADO: headlineMedium
-                    fontWeight = FontWeight.Bold,  // ⬅️ NUEVO: Bold
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
                     color = Color(0xFF001427)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Inicia sesión para continuar",  // ⬅️ MEJORADO: Texto más claro
+                    text = "Inicia sesión para continuar",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF001427).copy(alpha = 0.6f)
                 )
@@ -234,7 +233,7 @@ fun LoginCard(
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),  // ⬅️ MEJORADO: Más alto
+                        .height(56.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF001427),

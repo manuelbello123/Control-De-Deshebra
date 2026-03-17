@@ -22,8 +22,7 @@ import kotlin.time.Clock
 
 class HistoryRepository(private val client: HttpClient) {
 
-    private val baseUrl = "http://3.131.91.29"
-
+    private val baseUrl = "http://3.145.5.253"
     private fun semanaIsoActual(): Int {
         val hoy = Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -108,8 +107,7 @@ class HistoryRepository(private val client: HttpClient) {
             HistoryResult.Error("Sin conexión a internet. Verifica tu red.")
 
         } catch (e: CancellationException) {
-            throw e // importante no atraparlo
-
+            throw e
         } catch (e: Exception) {
             HistoryResult.Error("Error inesperado: ${e.message}")
         }

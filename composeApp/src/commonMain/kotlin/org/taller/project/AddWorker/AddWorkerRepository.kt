@@ -18,7 +18,7 @@ import org.taller.project.Models.UpdateTrabajadorRequest
 
 class AddWorkerRepository(private val client: HttpClient) {
 
-    private val baseUrl = "http://3.131.91.29"
+    private val baseUrl = "http://3.145.5.253"
 
     // ── GET: Obtener todos los trabajadores ────────────────────────────
     suspend fun getTrabajadores(): WorkersListResult {

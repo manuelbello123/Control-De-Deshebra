@@ -18,20 +18,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
-import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.Inbox
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,15 +52,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.taller.project.History.DayHeader
 import org.taller.project.History.toDayName
-import org.taller.project.Models.ProductionByDay
 import org.taller.project.Models.ProductionDay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,8 +124,6 @@ fun ProductionWorkerScreen(
                                 modifier = Modifier.size(25.dp)
                             )
                         }
-
-                    //Spacer(modifier = Modifier.size(10.dp))
                         Column {
 
                             Text(
@@ -155,7 +142,7 @@ fun ProductionWorkerScreen(
                     }
 
                 },
-                )
+            )
         },
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->

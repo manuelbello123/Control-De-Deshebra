@@ -12,7 +12,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.io.IOException
-import org.taller.project.AddUser.UpdateUserResult
 import org.taller.project.Models.CatalogoSimpleDto
 import org.taller.project.Models.CreateCatalogoRequest
 import org.taller.project.Models.CreatePrecioRequest
@@ -24,7 +23,7 @@ import org.taller.project.Models.UpdatePrecioRequest
 
 class AddGarmentRepository(private val client: HttpClient) {
 
-    private val baseUrl = "http://3.131.91.29"
+    private val baseUrl = "http://3.145.5.253"
 
     suspend fun getPrendas(): PrendasResult {
         return try {
@@ -127,6 +126,7 @@ class AddGarmentRepository(private val client: HttpClient) {
                 409 -> DeletePrendaResult.Error(
                     "No se puede eliminar. La prenda está registrada en producciones."
                 )
+
                 else -> DeletePrendaResult.Error("Error: ${e.response.status.description}")
             }
 

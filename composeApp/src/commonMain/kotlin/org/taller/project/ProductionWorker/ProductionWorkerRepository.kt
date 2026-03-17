@@ -12,7 +12,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.supervisorScope
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
@@ -21,7 +20,6 @@ import kotlinx.io.IOException
 import org.taller.project.Models.CreateProduccionRequest
 import org.taller.project.Models.PrendaDto
 import org.taller.project.Models.ProduccionDetalleDto
-import org.taller.project.Models.ProduccionDto
 import org.taller.project.Models.ProduccionExpandida
 import org.taller.project.Models.SueldoSemanalDto
 import org.taller.project.Models.UpdateProduccionRequest
@@ -30,7 +28,7 @@ import kotlin.time.Clock
 
 class ProductionWorkerRepository(private val client: HttpClient) {
 
-    private val baseUrl = "http://3.131.91.29"
+    private val baseUrl = "http://3.145.5.253"
 
     // Calcular semana ISO actual
     private fun semanaIsoActual(): Int {
@@ -94,7 +92,6 @@ class ProductionWorkerRepository(private val client: HttpClient) {
             val prendas      = prendasDeferred.await()
             val usuarios     = usuariosDeferred.await()
 
-            // Mapas para lookup O(1)
             val prendasMap  = prendas.associateBy { it.idPrenda }
             val usuariosMap = usuarios.associateBy { it.idUsuario }
 
